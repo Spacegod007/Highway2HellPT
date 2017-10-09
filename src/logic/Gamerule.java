@@ -12,14 +12,6 @@ public class Gamerule {
     }
 
     public void setValue(int value) {
-        if (true)
-        {
-            this.value = value;
-        }
-        else
-        {
-            System.out.println("test");
-        }
+        this.value = value;
     }
-
 }
