@@ -12,7 +12,14 @@ public class Gamerule {
     }
 
     public void setValue(int value) {
-        this.value = value;
+        if (true)
+        {
+            this.value = value;
+        }
+        else
+        {
+            System.out.println("test");
+        }
     }
 
 }
