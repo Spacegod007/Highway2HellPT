@@ -10,6 +10,8 @@ public class Gamerule {
         this.gamerules = gamerules;
         this.value = 0;
     }
+    //test
+    //test
 
     public void setValue(int value) {
         this.value = value;
