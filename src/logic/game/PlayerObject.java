@@ -31,6 +31,16 @@ public class PlayerObject extends GameObject {
     }
 
     public void move(Direction direction){
-        throw new UnsupportedOperationException();
-    };
+        //Changes the X and Y coordinates of the current player.
+        switch(direction) {
+            case LEFT:
+                double[] leftPoint = {getAnchor().getX()-16d, getAnchor().getY()-10d};
+                this.setAnchor(new Point(leftPoint[0], leftPoint[1]));
+                break;
+            case RIGHT:
+                double[] rightPoint = {getAnchor().getX()+16d, getAnchor().getY()-10d};
+                this.setAnchor(new Point(rightPoint[0], rightPoint[1]));
+                break;
+        }
+    }
 }

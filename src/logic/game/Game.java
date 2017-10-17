@@ -9,6 +9,7 @@ import java.util.Observer;
 public class Game implements Runnable, Observer {
     private List<GameObject> GameObjects;
     private List<Gamerule> gamerules;
+    private double scrollSpeed = 1.5;
 
     public List<GameObject> getGameObjects() {
         return GameObjects;
@@ -47,6 +48,13 @@ public class Game implements Runnable, Observer {
 
     @Override
     public void update(Observable o, Object arg) {
-        throw new UnsupportedOperationException();
+        //Method for scrolling the screen.
+        for(GameObject GO : getGameObjects())
+        {
+            GO.setAnchor(new Point(GO.getAnchor().getX(), GO.getAnchor().getY() + scrollSpeed));
+        }
+
+
     }
+
 }
