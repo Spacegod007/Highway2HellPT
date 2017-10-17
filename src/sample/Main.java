@@ -1,5 +1,7 @@
 package sample;
 
+import database.Contexts.DatabaseContext;
+import database.Repositories.Repository;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -18,6 +20,10 @@ public class Main extends Application {
 
 
     public static void main(String[] args) {
+        Repository repo = new Repository(new DatabaseContext());
+        System.out.println(Boolean.toString(repo.testConnection()));
         launch(args);
+        repo.closeConnection();
+
     }
 }
