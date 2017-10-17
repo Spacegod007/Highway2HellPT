@@ -1,5 +1,6 @@
 package logic.game;
 
+import javafx.scene.image.Image;
 import logic.Gamerule;
 
 import java.util.List;
@@ -51,10 +52,34 @@ public class Game implements Runnable, Observer {
         //Method for scrolling the screen.
         for(GameObject GO : getGameObjects())
         {
+            //GO scroll.
             GO.setAnchor(new Point(GO.getAnchor().getX(), GO.getAnchor().getY() + scrollSpeed));
+
+            //Check if GO is dead.
+            //Game window: 1200x1000
+            //Character size 52x36
+            if(GO.getClass() == PlayerObject.class)
+            {
+                //Might need some tweaking, leave to the tester.
+                PlayerObject PO = (PlayerObject)GO;
+                if(PO.getAnchor().getX() < 0 + PO.getPlayerSize()[0])
+                {
+                    PO.setIsDead(true);
+                }
+                else if(PO.getAnchor().getX() > 1200)
+                {
+                    PO.setIsDead(true);
+                }
+                else if(PO.getAnchor().getY() + (PO.getPlayerSize()[1]/2) > 1000)
+                {
+                    PO.setIsDead(true);
+                }
+                else if(PO.getAnchor().getY() + (PO.getPlayerSize()[1]/2) < 0)
+                {
+                    PO.setIsDead(true);
+                }
+            }
         }
-
-
     }
 
 }
