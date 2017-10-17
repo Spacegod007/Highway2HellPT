@@ -19,7 +19,7 @@ public class Game implements Runnable, Observer {
     public Game(List<Gamerule> gamerules) {
         this.gamerules = gamerules;
         GameObjects = new ArrayList<>();
-        GameObjects.add(new PlayerObject(new Point(10, 10),"Player1", Color.BLACK));
+        GameObjects.add(new PlayerObject(new Point(900, 900),"Player1", Color.BLACK));
     }
 
     public List<GameObject> getGameObjects() {
@@ -61,13 +61,12 @@ public class Game implements Runnable, Observer {
         }
     }
 
-    public ImageView moveCharacter(String playerName, Direction direction) {
+    public Point moveCharacter(String playerName, Direction direction) {
         for (GameObject g : GameObjects) {
             if (g.getClass() == PlayerObject.class) ;
             {
                 PlayerObject p = (PlayerObject) g;
-                if (p.getName() == "Player1");
-                {
+                if (p.getName() == "Player1") {
                     switch (direction) {
                         case LEFT:
                             p.move(Direction.LEFT);
@@ -79,8 +78,21 @@ public class Game implements Runnable, Observer {
                             break;
                     }
                 }
+                if (p.getName() == "Player2") {
+                    switch (direction) {
+                        case A:
+                            p.move(Direction.LEFT);
+                            System.out.println("Player moved left");
+                            break;
+                        case D:
+                            p.move(Direction.RIGHT);
+                            System.out.println("Player moved right");
+                            break;
+                    }
+                }
+                    return p.getAnchor();
             }
         }
-        return null; // TO DO: RETURN IMAGEVIEW
+        return null;
     }
 }
