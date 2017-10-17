@@ -33,9 +33,6 @@ public class Game implements Runnable, Observer {
     public void update(){
         throw new UnsupportedOperationException();
     }
-    public void convertAccountsToPlayerObjects(){
-        throw new UnsupportedOperationException();
-    }
     public void endGame(){
         throw new UnsupportedOperationException();
     }
