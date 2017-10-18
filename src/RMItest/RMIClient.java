@@ -5,6 +5,7 @@
 package RMItest;
 
 import logic.administration.Lobby;
+import logic.administration.User;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -14,6 +15,7 @@ import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
+import java.util.List;
 import java.util.Properties;
 import java.util.Scanner;
 
@@ -92,7 +94,8 @@ public class RMIClient {
 
         // Test RMI connection
         if (lobbyAdmin != null) {
-            testlobbyAdministration();
+            testConnection();
+            //testlobbyAdministration();
         }
     }
 
@@ -122,27 +125,69 @@ public class RMIClient {
             System.out.println("Client: RemoteException: " + ex.getMessage());
         }
     }
+
+    public List<Lobby> getLobbies(){
+        try{
+            return lobbyAdmin.getLobbies();
+        }
+        catch (RemoteException ex){
+            System.out.println("Client: RemoteException: " + ex.getMessage());
+            return null;
+        }
+    }
+
+    public int getNextID()
+    {
+        int i = LobbyAdmin.getNextID();
+        System.out.println(i);
+        return i;
+    }
+
+    public boolean joinLobby(Lobby lobby, User user)
+    {
+        try{
+            return lobbyAdmin.joinLobby(lobby, user);
+        }
+        catch(RemoteException ex){
+            System.out.println("Client: RemoteException: " + ex.getMessage());
+            return false;
+        }
+    }
+
     // Test RMI connection
+    private void testConnection()
+    {
+        try
+        {
+            lobbyAdmin.getNumberOfLobbies();
+            System.out.println("Client: Connected ");
+        }
+        catch (RemoteException ex)
+        {
+            System.out.println("Client: Cannot connect");
+            System.out.println("Client: RemoteException: " + ex.getMessage());
+    }
+    };
     private void testlobbyAdministration() {
-        // Get number of students
-        try {
-            System.out.println("Client: Number of lobbies: " + lobbyAdmin.getNumberOfLobbies());
-        } catch (RemoteException ex) {
-            System.out.println("Client: Cannot get number of lobbies");
-            System.out.println("Client: RemoteException: " + ex.getMessage());
-        }
-        try {
-            System.out.println("Client: Addlobby: " + lobbyAdmin.addLobby(new Lobby("test")));
-        } catch (RemoteException ex) {
-            System.out.println("Client: Cannot add lobby");
-            System.out.println("Client: RemoteException: " + ex.getMessage());
-        }
-        try {
-            System.out.println("Client: Number of lobbies: " + lobbyAdmin.getNumberOfLobbies());
-        } catch (RemoteException ex) {
-            System.out.println("Client: Cannot get number of lobbies");
-            System.out.println("Client: RemoteException: " + ex.getMessage());
-        }
+//        // Get number of students
+//        try {
+//            System.out.println("Client: Number of lobbies: " + lobbyAdmin.getNumberOfLobbies());
+//        } catch (RemoteException ex) {
+//            System.out.println("Client: Cannot get number of lobbies");
+//            System.out.println("Client: RemoteException: " + ex.getMessage());
+//        }
+//        try {
+//            System.out.println("Client: Addlobby: " + lobbyAdmin.addLobby(new Lobby("test")));
+//        } catch (RemoteException ex) {
+//            System.out.println("Client: Cannot add lobby");
+//            System.out.println("Client: RemoteException: " + ex.getMessage());
+//        }
+//        try {
+//            System.out.println("Client: Number of lobbies: " + lobbyAdmin.getNumberOfLobbies());
+//        } catch (RemoteException ex) {
+//            System.out.println("Client: Cannot get number of lobbies");
+//            System.out.println("Client: RemoteException: " + ex.getMessage());
+//        }
     }
 
     // Main method

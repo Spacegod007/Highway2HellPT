@@ -4,28 +4,14 @@ import RMItest.RMIClient;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class Administration
 {
 
     private RMIClient rmiClient;
     private User user;
-    private List<Lobby> lobbies;
-    private ObservableList<Lobby> obsLobbies;
-    public ObservableList<Lobby> getLobbies()
-    {
-        return FXCollections.unmodifiableObservableList(obsLobbies);
-    }
 
     public Administration(RMIClient rmiClient){
         this.rmiClient = rmiClient;
-        lobbies = new ArrayList<>();
-        obsLobbies = FXCollections.observableList(lobbies);
-        //**
-        obsLobbies.add(new Lobby("MOCKUP"));
-        //**
     }
 
     public User getUser() {
@@ -39,7 +25,7 @@ public class Administration
     public boolean joinLobby(Lobby lobby){
         try
         {
-            if(lobby.join(user))
+            if(rmiClient.joinLobby(lobby, user))
             {
                return true;
             }
@@ -52,13 +38,23 @@ public class Administration
         }
     }
 
+    public ObservableList<Lobby> refresh()
+    {
+        try{
+            return FXCollections.observableList(rmiClient.getLobbies());
+        }
+        catch (Exception e){
+            e.printStackTrace();
+            return null;
+        }
+    }
+
     public boolean hostLobby(String name)
     {
         try{
-            Lobby lobby = new Lobby(name);
-            joinLobby(lobby);
-            obsLobbies.add(lobby);
+            Lobby lobby = new Lobby(name, rmiClient.getNextID());
             rmiClient.addLobby(lobby);
+            joinLobby(lobby);
             return true;
         }
         catch(Exception e){

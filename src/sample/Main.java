@@ -47,6 +47,7 @@ public class Main extends Application{
         {
             Repository repo = new Repository(new LocalContext());
             System.out.println("Connection to database: " + Boolean.toString(repo.testConnection()));
+            administration.setUser(new User("David"));
             root = FXMLLoader.load(getClass().getResource("main.fxml"));
             primaryStage.setTitle("Hello World");
             Canvas canvas = new Canvas(600, 600);
@@ -64,7 +65,7 @@ public class Main extends Application{
 
     private void refreshLobbies()
     {
-        listvwLobby.refresh();
+        listvwLobby.setItems(administration.refresh());
     }
 
     private void setUpControls()
@@ -101,7 +102,7 @@ public class Main extends Application{
 
         listvwLobby.setLayoutX(50);
         listvwLobby.setLayoutY(150);
-        listvwLobby.setItems(administration.getLobbies());
+        listvwLobby.setItems(administration.refresh());
 
         listvwPlayers.setLayoutX(300);
         listvwPlayers.setLayoutY(150);
@@ -112,8 +113,8 @@ public class Main extends Application{
 
     private void hostLobby(){
         try{
-            System.out.print("Enter name for lobby: ");
-            administration.hostLobby(input.nextLine());
+            administration.hostLobby("testlobby");
+            listvwLobby.setItems(administration.refresh());
         }
         catch(Exception e){
             e.printStackTrace();
@@ -155,19 +156,19 @@ public class Main extends Application{
     {
         try
         {
-            System.out.print("Enter name for user: ");
-            administration.setUser(new User(input.nextLine()));
             Lobby lobby = listvwLobby.getSelectionModel().getSelectedItem();
             if(lobby != null)
             {
                 if(administration.joinLobby(lobby))
                 {
                     //success join lobby
-                    listvwLobby.refresh();
+                    System.out.println("Successful join");
+                    listvwLobby.setItems(administration.refresh());
                 }
                 else
                 {
                     //fail join lobby
+                    System.out.println("Failed join");
                 }
             }
             else

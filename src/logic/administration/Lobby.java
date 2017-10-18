@@ -9,7 +9,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class Lobby extends java.util.Observable implements Runnable, Serializable{
+public class Lobby implements Runnable, Serializable{
+    private int id;
     private User host;
     private String name;
     private List<User> players;
@@ -18,6 +19,7 @@ public class Lobby extends java.util.Observable implements Runnable, Serializabl
     public User getHost() {
         return host;
     }
+    public int getId(){return id;}
 
     public void setHost(User host) {
         this.host = host;
@@ -35,10 +37,11 @@ public class Lobby extends java.util.Observable implements Runnable, Serializabl
         return name;
     }
     
-    public Lobby(String name){
+    public Lobby(String name, int id){
         players = new ArrayList<>();
         gamerules = new ArrayList<>();
         this.name = name;
+        this.id = id;
     }
 
     public boolean join(User player){
