@@ -13,6 +13,11 @@ import java.util.List;
 
 public class LobbyAdmin extends UnicastRemoteObject implements ILobbyAdmin{
     private ArrayList<Lobby> Lobbys;
+    private static int nextID = 100;
+    public static int getNextID(){
+        nextID++;
+        return nextID;
+    }
 
     // Constructor
     public LobbyAdmin() throws RemoteException {
@@ -36,6 +41,7 @@ public class LobbyAdmin extends UnicastRemoteObject implements ILobbyAdmin{
 
     public Lobby addLobby(Lobby lobby) throws RemoteException {
         Lobbys.add(lobby);
+        nextID++;
         System.out.println("LobbyAdmin: Lobby " + lobby.toString() + " added to Lobby administration");
         return lobby;
     }

@@ -41,11 +41,11 @@ public class Lobby implements Runnable, Serializable{
         return name;
     }
     
-    public Lobby(String name){
+    public Lobby(String name, int id){
         players = new ArrayList<>();
         gamerules = new ArrayList<>();
         this.name = name;
-        this.id = 10;
+        this.id = id;
     }
 
     public boolean join(User player){
