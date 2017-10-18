@@ -1,6 +1,7 @@
 package logic.administration;
 
 import RMItest.LobbyAdmin;
+import RMItest.RMIClient;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import sample.Main;
@@ -12,6 +13,8 @@ import java.util.Observable;
 
 public class Administration
 {
+
+    private RMIClient rmiClient;
     private User user;
     private List<Lobby> lobbies;
     private ObservableList<Lobby> obsLobbies;
@@ -20,8 +23,8 @@ public class Administration
         return FXCollections.unmodifiableObservableList(obsLobbies);
     }
 
-    public Administration(String name){
-        this.user = new User(name);
+    public Administration(RMIClient rmiClient){
+        this.rmiClient = rmiClient;
         lobbies = new ArrayList<>();
         obsLobbies = FXCollections.observableList(lobbies);
         //**
@@ -59,7 +62,7 @@ public class Administration
             Lobby lobby = new Lobby(name);
             joinLobby(lobby);
             obsLobbies.add(lobby);
-            //lobbyAdmin.addLobby(lobby);
+            rmiClient.addLobby(lobby);
             return true;
         }
         catch(Exception e){

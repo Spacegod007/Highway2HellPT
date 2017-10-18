@@ -30,10 +30,9 @@ public class LobbyAdmin extends UnicastRemoteObject implements ILobbyAdmin{
         }
     }
 
-    public Lobby addLobby() throws RemoteException {
-        Lobby Lobby = new Lobby("Testlobby");
-        Lobbys.add(Lobby);
-        System.out.println("LobbyAdmin: Lobby " + Lobby.toString() + " added to Lobby administration");
-        return Lobby;
+    public Lobby addLobby(Lobby lobby) throws RemoteException {
+        Lobbys.add(lobby);
+        System.out.println("LobbyAdmin: Lobby " + lobby.toString() + " added to Lobby administration");
+        return lobby;
     }
 }

@@ -97,6 +97,14 @@ public class RMIClient {
         }
     }
 
+    public void addLobby(Lobby lobby){
+        try{
+            lobbyAdmin.addLobby(lobby);
+        }
+        catch(RemoteException ex){
+            System.out.println("Client: RemoteException: " + ex.getMessage());
+        }
+    }
     // Test RMI connection
     private void testlobbyAdministration() {
         // Get number of students
@@ -107,7 +115,7 @@ public class RMIClient {
             System.out.println("Client: RemoteException: " + ex.getMessage());
         }
         try {
-            System.out.println("Client: Addlobby: " + lobbyAdmin.addLobby());
+            System.out.println("Client: Addlobby: " + lobbyAdmin.addLobby(new Lobby("test")));
         } catch (RemoteException ex) {
             System.out.println("Client: Cannot add lobby");
             System.out.println("Client: RemoteException: " + ex.getMessage());

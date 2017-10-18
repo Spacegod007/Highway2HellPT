@@ -1,5 +1,6 @@
 package sample;
 
+import RMItest.RMIClient;
 import database.Contexts.LocalContext;
 import database.Repositories.Repository;
 import javafx.application.Application;
@@ -20,6 +21,8 @@ import java.util.*;
 
 public class Main extends Application{
 
+    private Scanner input = new Scanner(System.in);
+    private RMIClient rmiClient;
     private Administration administration;
     private Button btnHostLobby = new Button();
     private Button btnJoinLobby = new Button();
@@ -30,15 +33,22 @@ public class Main extends Application{
     private TextField text = new TextField();
     private Button btnRefresh = new Button();
     private Parent root; //niet converten naar local nog plz
-    private Scanner input = new Scanner(System.in);
+
 
     @Override
     public void start(Stage primaryStage) throws Exception{
         try
         {
+            System.out.println("Enter IPaddress and portnumber:");
+            System.out.println("    000.000.000.000");
+            System.out.println("    1100");
+            rmiClient = new RMIClient(input.nextLine(), input.nextInt());
+            administration = new Administration(rmiClient);
+            Repository repo = new Repository(new LocalContext());
+            System.out.println(Boolean.toString(repo.testConnection()));
             System.out.println("Welcome!");
             System.out.print("Enter username: ");
-            administration = new Administration(input.nextLine());
+            administration.setUser(new User(input.nextLine()));
             root = FXMLLoader.load(getClass().getResource("main.fxml"));
             primaryStage.setTitle("Hello World");
             Canvas canvas = new Canvas(600, 600);
@@ -66,31 +76,38 @@ public class Main extends Application{
         btnHostLobby.setPrefWidth(150);
         btnHostLobby.setText("Host lobby");
         btnHostLobby.setOnAction(event -> hostLobby());
+
         btnJoinLobby.setLayoutX(150);
         btnJoinLobby.setLayoutY(0);
         btnJoinLobby.setPrefWidth(150);
         btnJoinLobby.setText("Join lobby");
         btnJoinLobby.setOnAction(event -> joinLobby());
+
         btnKickPlayer.setLayoutX(0);
         btnKickPlayer.setLayoutY(550);
         btnKickPlayer.setPrefWidth(100);
         btnKickPlayer.setText("Kick player");
         btnKickPlayer.setOnAction(event -> kickPlayer());
+
         btnStartGame.setLayoutX(100);
         btnStartGame.setLayoutY(550);
         btnStartGame.setPrefWidth(100);
         btnStartGame.setText("Start game");
         btnStartGame.setOnAction(event -> startGame());
+
         btnRefresh.setLayoutX(0);
         btnRefresh.setLayoutY(50);
         btnRefresh.setText("Refresh");
         btnRefresh.setPrefWidth(100);
         btnRefresh.setOnAction(event -> refreshLobbies());
+
         listvwLobby.setLayoutX(50);
         listvwLobby.setLayoutY(150);
         listvwLobby.setItems(administration.getLobbies());
+
         listvwPlayers.setLayoutX(300);
         listvwPlayers.setLayoutY(150);
+
         text.setLayoutX(300);
         text.setLayoutY(0);
     }
@@ -178,10 +195,7 @@ public class Main extends Application{
     }
 
     public static void main(String[] args) {
-        Repository repo = new Repository(new LocalContext());
-        System.out.println(Boolean.toString(repo.testConnection()));
         launch(args);
-        repo.closeConnection();
     }
 
 }
