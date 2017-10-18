@@ -6,7 +6,7 @@ import jdk.internal.util.xml.impl.Input;
 
 import java.io.Serializable;
 
-public class User implements Observable, Serializable
+public class User implements Serializable
 {
     private String username;
 
@@ -20,16 +20,6 @@ public class User implements Observable, Serializable
 
     public User(String username) {
         this.username = username;
-    }
-
-    @Override
-    public void addListener(InvalidationListener listener) {
-
-    }
-
-    @Override
-    public void removeListener(InvalidationListener listener) {
-
     }
 
     @Override
