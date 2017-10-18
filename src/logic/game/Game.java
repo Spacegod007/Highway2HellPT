@@ -2,6 +2,8 @@ package logic.game;
 
 import javafx.scene.paint.Color;
 import logic.Gamerule;
+
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Observable;
@@ -10,13 +12,19 @@ import java.util.Observer;
 public class Game implements Runnable, Observer {
     private List<GameObject> GameObjects;
     private List<Gamerule> gamerules;
-    private double scrollSpeed = 1.5;
+    private double scrollSpeed = 2;
+    private int obstacleCount = 2;
 
     public Game(List<Gamerule> gamerules) {
         this.gamerules = gamerules;
         GameObjects = new ArrayList<>();
         GameObjects.add(new PlayerObject(new Point(960, 900),"Player1", Color.BLACK));
         GameObjects.add(new PlayerObject(new Point(860, 900),"Player2", Color.BLACK));
+
+        for(int i=0; i<obstacleCount; i++){
+            GameObjects.add(new ObstacleObject(70, 48));
+            System.out.println("item " + i + " added");
+        }
     }
 
     public List<GameObject> getGameObjects() {
@@ -36,6 +44,7 @@ public class Game implements Runnable, Observer {
     }
 
     public void update(){
+        int index = 0;
         //Method for scrolling the screen.
         for(GameObject GO : getGameObjects())
         {
@@ -67,7 +76,19 @@ public class Game implements Runnable, Observer {
                     PO.setIsDead(true);
                 }
             }
+
+            if (GO.getClass() == ObstacleObject.class)
+            {
+                ObstacleObject OO = (ObstacleObject) GO;
+                if(OO.getAnchor().getY() + (OO.getHeight()) > 1000)
+                {
+                    GameObjects.set(index, new ObstacleObject(70, 48));
+                    System.out.println("Obstacle respawned");
+                }
+            }
+            index++;
         }
+        index = 0;
     }
     public void convertAccountsToPlayerObjects(){
         throw new UnsupportedOperationException();
@@ -117,5 +138,18 @@ public class Game implements Runnable, Observer {
             }
         }
         return null;
+    }
+
+    public ArrayList<ObstacleObject> returnObstacleObjects()
+    {
+        ArrayList<ObstacleObject> listToReturn = new ArrayList<>();
+        for (GameObject GO : GameObjects)
+        {
+            if (GO.getClass() == ObstacleObject.class)
+            {
+                listToReturn.add((ObstacleObject)GO);
+            }
+        }
+        return listToReturn;
     }
 }

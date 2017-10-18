@@ -1,11 +1,13 @@
 package logic.game;
 
+import java.util.concurrent.ThreadLocalRandom;
+
 public class ObstacleObject extends GameObject {
     private int width;
     private int height;
 
-    public ObstacleObject(Point anchor, int width, int height) {
-        super(anchor);
+    public ObstacleObject(int width, int height) {
+        super(new Point(ThreadLocalRandom.current().nextInt(0, 1900 + 1), ThreadLocalRandom.current().nextInt(-500, 1)));
         this.width = width;
         this.height = height;
     }
