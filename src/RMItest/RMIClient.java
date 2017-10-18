@@ -6,10 +6,15 @@ package RMItest;
 
 import logic.administration.Lobby;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
+import java.util.Properties;
 import java.util.Scanner;
 
 
@@ -22,9 +27,21 @@ public class RMIClient {
     private Registry registry = null;
     private ILobbyAdmin lobbyAdmin = null;
 
-    // Constructor
-    public RMIClient(String ipAddress, int portNumber) {
+    public RMIClient(Properties properties)
+    {
+        String ip = properties.getProperty("ipAddress");
+        int port = Integer.parseInt(properties.getProperty("port"));
+        callCLient(ip, port);
+    }
 
+    // Constructor
+    public RMIClient(String ipAddress, int portNumber)
+    {
+        callCLient(ipAddress, portNumber);
+    }
+
+    private void callCLient(String ipAddress, int portNumber)
+    {
         // Print IP address and port number for registry
         System.out.println("Client: IP Address: " + ipAddress);
         System.out.println("Client: Port number " + portNumber);
@@ -145,5 +162,21 @@ public class RMIClient {
 
         // Create client
         RMIClient client = new RMIClient(ipAddress, portNumber);
+    }
+
+    public static Properties getConnectionProperties()
+    {
+        Properties properties = new Properties();
+
+        File file = new File("properties/lobbyAdmin.properties");
+        try (InputStream inputStream = new FileInputStream(file))
+        {
+            properties.load(inputStream);
+        } catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+
+        return properties;
     }
 }

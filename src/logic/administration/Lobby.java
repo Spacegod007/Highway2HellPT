@@ -1,12 +1,8 @@
 package logic.administration;
 
-import javafx.beans.InvalidationListener;
-import javafx.beans.Observable;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import logic.Gamerule;
-import logic.Gamerules;
-import sample.Main;
 
 import java.io.Serializable;
 import java.util.ArrayList;

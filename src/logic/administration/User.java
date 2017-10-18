@@ -1,9 +1,5 @@
 package logic.administration;
 
-import javafx.beans.InvalidationListener;
-import javafx.beans.Observable;
-import jdk.internal.util.xml.impl.Input;
-
 import java.io.Serializable;
 
 public class User implements Serializable

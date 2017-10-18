@@ -1,7 +1,6 @@
 package RMItest;
 
 import logic.administration.Lobby;
-import sample.Main;
 
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;

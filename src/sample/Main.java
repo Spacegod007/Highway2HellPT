@@ -1,6 +1,5 @@
 package sample;
 
-import RMItest.RMIClient;
 import database.Contexts.LocalContext;
 import database.Repositories.Repository;
 import javafx.application.Application;
@@ -8,7 +7,9 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
-import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.ListView;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
@@ -17,13 +18,12 @@ import logic.administration.Lobby;
 import logic.administration.User;
 
 import java.io.IOException;
-import java.util.*;
+import java.util.Scanner;
 
 public class Main extends Application{
 
     private Scanner input = new Scanner(System.in);
-    private RMIClient rmiClient;
-    private Administration administration;
+    private static Administration administration;
     private Button btnHostLobby = new Button();
     private Button btnJoinLobby = new Button();
     private Button btnKickPlayer = new Button();
@@ -34,21 +34,19 @@ public class Main extends Application{
     private Button btnRefresh = new Button();
     private Parent root; //niet converten naar local nog plz
 
+    public static void launchView(String[] args, Administration admin)
+    {
+        administration = admin;
+        System.out.println("launching");
+        launch(args);
+    }
 
     @Override
     public void start(Stage primaryStage) throws Exception{
         try
         {
-            System.out.println("Enter IPaddress and portnumber:");
-            System.out.println("    000.000.000.000");
-            System.out.println("    1100");
-            rmiClient = new RMIClient(input.nextLine(), input.nextInt());
-            administration = new Administration(rmiClient);
             Repository repo = new Repository(new LocalContext());
-            System.out.println(Boolean.toString(repo.testConnection()));
-            System.out.println("Welcome!");
-            System.out.print("Enter username: ");
-            administration.setUser(new User(input.nextLine()));
+            System.out.println("Connection to database: " + Boolean.toString(repo.testConnection()));
             root = FXMLLoader.load(getClass().getResource("main.fxml"));
             primaryStage.setTitle("Hello World");
             Canvas canvas = new Canvas(600, 600);
@@ -193,9 +191,4 @@ public class Main extends Application{
     private void startGame(){
         text.setText("Startgame");
     }
-
-    public static void main(String[] args) {
-        launch(args);
-    }
-
 }
