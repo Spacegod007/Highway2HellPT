@@ -10,11 +10,6 @@ import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 
-/**
- * Example of RMI using Registry
- *
- * @author Nico Kuijpers
- */
 public class RMIServer {
 
     // Set port number

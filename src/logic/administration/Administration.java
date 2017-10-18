@@ -1,20 +1,32 @@
 package logic.administration;
 
+import RMItest.LobbyAdmin;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import sample.Main;
 
 import javax.print.DocFlavor;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Observable;
 
-public class Administration {
+public class Administration
+{
     private User user;
-    private Main m;
-    private Lobby l;
+    private List<Lobby> lobbies;
+    private ObservableList<Lobby> obsLobbies;
+    public ObservableList<Lobby> getLobbies()
+    {
+        return FXCollections.unmodifiableObservableList(obsLobbies);
+    }
 
-    public Lobby getLobby(){return l;}
-
-    public Administration(Main m, String n) {
-        this.m = m;
-        this.user = new User(n);
+    public Administration(String name){
+        this.user = new User(name);
+        lobbies = new ArrayList<>();
+        obsLobbies = FXCollections.observableList(lobbies);
+        //**
+        obsLobbies.add(new Lobby("MOCKUP"));
+        //**
     }
 
     public User getUser() {
@@ -25,40 +37,36 @@ public class Administration {
         this.user = user;
     }
 
-    public boolean joinLobby(Lobby l){
+    public boolean joinLobby(Lobby lobby){
         try
         {
-            l.addPlayer(user);
-            this.l = l;
-            return true;
+            if(lobby.join(user))
+            {
+               return true;
+            }
+            return false;
         }
         catch(Exception e)
         {
-            //return false;
-            throw new UnsupportedOperationException();
+            e.printStackTrace();
+            return false;
         }
     }
 
-    public void kickPlayer(User p){
-        l.kickPlayer(p);
+    public boolean hostLobby(String name)
+    {
+        try{
+            Lobby lobby = new Lobby(name);
+            joinLobby(lobby);
+            obsLobbies.add(lobby);
+            //lobbyAdmin.addLobby(lobby);
+            return true;
+        }
+        catch(Exception e){
+            return false;
+        }
     }
 
-    //user moet nog geSet worden voor dit uitgevoerd kan worden
-    public boolean hostLobby()
-    {
-       try {
-           Lobby lobby = new Lobby(m, "new");
-           joinLobby(lobby);
-           Thread server = (new Thread(lobby)); //
-           server.start();
-           l = lobby;
-           return true;
-       }
-       catch(Exception e) {
-           //return false;
-           throw new UnsupportedOperationException();
-       }
-    }
 
 
 

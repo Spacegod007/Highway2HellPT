@@ -15,10 +15,10 @@ import java.util.Scanner;
 
 public class RMIClient {
 
-    // Set binding name for student administration
+    // Set binding name for lobby administration
     private static final String bindingName = "LobbyAdmin";
 
-    // References to registry and student administration
+    // References to registry and lobby administration
     private Registry registry = null;
     private ILobbyAdmin lobbyAdmin = null;
 

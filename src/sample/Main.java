@@ -3,8 +3,6 @@ package sample;
 import database.Contexts.LocalContext;
 import database.Repositories.Repository;
 import javafx.application.Application;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -17,16 +15,12 @@ import logic.administration.Administration;
 import logic.administration.Lobby;
 import logic.administration.User;
 
-import javax.xml.soap.Text;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Observable;
-import java.util.Observer;
+import java.util.*;
 
-public class Main extends Application implements Observer{
+public class Main extends Application{
 
-    private Administration administration = new Administration(this, "Jan");
+    private Administration administration;
     private Button btnHostLobby = new Button();
     private Button btnJoinLobby = new Button();
     private Button btnKickPlayer = new Button();
@@ -34,19 +28,23 @@ public class Main extends Application implements Observer{
     private ListView<Lobby> listvwLobby = new ListView<>();
     private ListView<User> listvwPlayers = new ListView<User>();
     private TextField text = new TextField();
-    private Button btnTESTaddRandomPlayers = new Button();
+    private Button btnRefresh = new Button();
     private Parent root; //niet converten naar local nog plz
+    private Scanner input = new Scanner(System.in);
 
     @Override
     public void start(Stage primaryStage) throws Exception{
         try
         {
+            System.out.println("Welcome!");
+            System.out.print("Enter username: ");
+            administration = new Administration(input.nextLine());
             root = FXMLLoader.load(getClass().getResource("main.fxml"));
             primaryStage.setTitle("Hello World");
             Canvas canvas = new Canvas(600, 600);
             ((GridPane)root).getChildren().add(canvas);
             setUpControls();
-            ((GridPane)root).getChildren().add(new Pane(btnHostLobby, btnJoinLobby, btnKickPlayer, btnStartGame, text, listvwLobby, listvwPlayers, btnTESTaddRandomPlayers));
+            ((GridPane)root).getChildren().add(new Pane(btnHostLobby, btnJoinLobby, btnKickPlayer, btnStartGame, text, listvwLobby, listvwPlayers, btnRefresh));
             primaryStage.setScene(new Scene(root, 600, 600));
             primaryStage.show();
         }
@@ -54,6 +52,11 @@ public class Main extends Application implements Observer{
         {
             e.printStackTrace();
         }
+    }
+
+    private void refreshLobbies()
+    {
+        listvwLobby.refresh();
     }
 
     private void setUpControls()
@@ -78,14 +81,14 @@ public class Main extends Application implements Observer{
         btnStartGame.setPrefWidth(100);
         btnStartGame.setText("Start game");
         btnStartGame.setOnAction(event -> startGame());
-        btnTESTaddRandomPlayers.setLayoutX(0);
-        btnTESTaddRandomPlayers.setLayoutY(50);
-        btnTESTaddRandomPlayers.setText("Add random testplayers");
-        btnTESTaddRandomPlayers.setPrefWidth(100);
-        btnTESTaddRandomPlayers.setOnAction(event -> addTestPlayers());
+        btnRefresh.setLayoutX(0);
+        btnRefresh.setLayoutY(50);
+        btnRefresh.setText("Refresh");
+        btnRefresh.setPrefWidth(100);
+        btnRefresh.setOnAction(event -> refreshLobbies());
         listvwLobby.setLayoutX(50);
         listvwLobby.setLayoutY(150);
-        listvwLobby.setItems(Lobby.list());
+        listvwLobby.setItems(administration.getLobbies());
         listvwPlayers.setLayoutX(300);
         listvwPlayers.setLayoutY(150);
         text.setLayoutX(300);
@@ -94,43 +97,81 @@ public class Main extends Application implements Observer{
 
     private void hostLobby(){
         try{
-            text.setText("Host lobby");
-            //code for new window
-            administration.hostLobby();
-            listvwPlayers.setItems(administration.getLobby().getPlayers());
+            System.out.print("Enter name for lobby: ");
+            administration.hostLobby(input.nextLine());
+        }
+        catch(Exception e){
+            e.printStackTrace();
+        }
+    }
 
+//    private void hostLobby(){
+//        try{
+//            text.setText("Host lobby");
+//            //code for new window
+//            administration.hostLobby();
+//            listvwPlayers.setItems(administration.getLobby().getPlayers());
+//
+//        }
+//        catch(Exception e)
+//        {
+//            e.printStackTrace();
+//            text.setText(e.toString());
+//        }
+//
+//    }
+//    private void joinLobby(){
+//        try{
+//            text.setText("Join lobby");
+//            //code for new window
+//            Lobby l = listvwLobby.getSelectionModel().getSelectedItem();
+//            if(l != null){administration.joinLobby(l);}
+//            else{text.setText("Nothing selected");}
+//            listvwLobby.setDisable(true);
+//            listvwPlayers.setItems(administration.getLobby().getPlayers());
+//        }
+//        catch(Exception e)//IOException e
+//        {
+//            e.printStackTrace();
+//            text.setText(e.toString());
+//        }
+//    }
+    private void joinLobby()
+    {
+        try
+        {
+            System.out.print("Enter name for user: ");
+            administration.setUser(new User(input.nextLine()));
+            Lobby lobby = listvwLobby.getSelectionModel().getSelectedItem();
+            if(lobby != null)
+            {
+                if(administration.joinLobby(lobby))
+                {
+                    //success join lobby
+                    listvwLobby.refresh();
+                }
+                else
+                {
+                    //fail join lobby
+                }
+            }
+            else
+            {
+                System.out.println("No lobby selected");
+            }
         }
         catch(Exception e)
         {
             e.printStackTrace();
-            text.setText(e.toString());
-        }
-
-    }
-    private void joinLobby(){
-        try{
-            text.setText("Join lobby");
-            //code for new window
-            Lobby l = listvwLobby.getSelectionModel().getSelectedItem();
-            if(l != null){administration.joinLobby(l);}
-            else{text.setText("Nothing selected");}
-            listvwLobby.setDisable(true);
-            listvwPlayers.setItems(administration.getLobby().getPlayers());
-        }
-        catch(Exception e)//IOException e
-        {
-            e.printStackTrace();
-            text.setText(e.toString());
         }
     }
     private void addTestPlayers(){
         text.setText("Addtestplayer");
     }
 
-    private void kickPlayer(){
-        text.setText("Kickplayer");
-        User p = listvwPlayers.getSelectionModel().getSelectedItem();
-        administration.kickPlayer(p);
+    private void kickPlayer()
+    {
+        //
     }
     private void startGame(){
         text.setText("Startgame");
@@ -143,7 +184,4 @@ public class Main extends Application implements Observer{
         repo.closeConnection();
     }
 
-    @Override
-    public void update(Observable o, Object arg) {
-    }
 }
