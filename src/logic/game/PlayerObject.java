@@ -73,7 +73,7 @@ public class PlayerObject extends GameObject {
             //Changes the X and Y coordinates of the current player.
             switch(direction) {
                 case LEFT:
-                    double[] leftPoint = {getAnchor().getX()-16d, getAnchor().getY()-10d};
+                    double[] leftPoint = {this.getAnchor().getX()-16d, this.getAnchor().getY()-10d};
                     //Adds distance in pixels to score.
                     setDistance(getDistance() + (long)10d);
 

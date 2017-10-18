@@ -1,10 +1,7 @@
 package logic.game;
 
-import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
-import javafx.scene.image.Image;
 import logic.Gamerule;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Observable;
@@ -14,13 +11,12 @@ public class Game implements Runnable, Observer {
     private List<GameObject> GameObjects;
     private List<Gamerule> gamerules;
     private double scrollSpeed = 1.5;
-    private boolean leftPressed = false;
-    private boolean rightPressed = false;
 
     public Game(List<Gamerule> gamerules) {
         this.gamerules = gamerules;
         GameObjects = new ArrayList<>();
-        GameObjects.add(new PlayerObject(new Point(900, 900),"Player1", Color.BLACK));
+        GameObjects.add(new PlayerObject(new Point(960, 900),"Player1", Color.BLACK));
+        GameObjects.add(new PlayerObject(new Point(860, 900),"Player2", Color.BLACK));
     }
 
     public List<GameObject> getGameObjects() {
@@ -40,22 +36,6 @@ public class Game implements Runnable, Observer {
     }
 
     public void update(){
-        throw new UnsupportedOperationException();
-    }
-    public void convertAccountsToPlayerObjects(){
-        throw new UnsupportedOperationException();
-    }
-    public void endGame(){
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public void run() {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public void update(Observable o, Object arg) {
         //Method for scrolling the screen.
         for(GameObject GO : getGameObjects())
         {
@@ -67,6 +47,7 @@ public class Game implements Runnable, Observer {
             //Character size 52x36
             if(GO.getClass() == PlayerObject.class)
             {
+                //Setting the borders of the map for player death.
                 //Might need some tweaking, leave to the tester.
                 PlayerObject PO = (PlayerObject)GO;
                 if(PO.getAnchor().getX() < 0 + PO.getPlayerSize()[0])
@@ -88,37 +69,51 @@ public class Game implements Runnable, Observer {
             }
         }
     }
+    public void convertAccountsToPlayerObjects(){
+        throw new UnsupportedOperationException();
+    }
+    public void endGame(){
+        throw new UnsupportedOperationException();
+    }
 
-    public Point moveCharacter(String playerName, Direction direction) {
+    @Override
+    public void run() {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public void update(Observable o, Object arg) {
+    }
+
+    public PlayerObject moveCharacter(String playerName, Direction direction) {
         for (GameObject g : GameObjects) {
-            if (g.getClass() == PlayerObject.class) ;
+            if (g.getClass() == PlayerObject.class)
             {
                 PlayerObject p = (PlayerObject) g;
-                if (p.getName() == "Player1") {
+                if (playerName == "Player1" && p.getName() == "Player1")
+                {
                     switch (direction) {
                         case LEFT:
                             p.move(Direction.LEFT);
-                            System.out.println("Player moved left");
                             break;
                         case RIGHT:
                             p.move(Direction.RIGHT);
-                            System.out.println("Player moved right");
                             break;
                     }
+                    return p;
                 }
-                if (p.getName() == "Player2") {
+                if (playerName == "Player2" && p.getName() == "Player2")
+                {
                     switch (direction) {
                         case A:
                             p.move(Direction.LEFT);
-                            System.out.println("Player moved left");
                             break;
                         case D:
                             p.move(Direction.RIGHT);
-                            System.out.println("Player moved right");
                             break;
                     }
+                    return p;
                 }
-                    return p.getAnchor();
             }
         }
         return null;
