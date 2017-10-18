@@ -52,9 +52,8 @@ public class Administration
     public boolean hostLobby(String name)
     {
         try{
-            Lobby lobby = new Lobby(name, rmiClient.getNextID());
-            rmiClient.addLobby(lobby);
-            joinLobby(lobby);
+            //Lobby lobby = new Lobby(name, rmiClient.getNextID());
+            joinLobby(rmiClient.addLobby(name));
             return true;
         }
         catch(Exception e){

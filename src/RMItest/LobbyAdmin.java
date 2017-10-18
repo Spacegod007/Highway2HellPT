@@ -1,10 +1,7 @@
 package RMItest;
 
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import logic.administration.Lobby;
 import logic.administration.User;
-import sample.Main;
 
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
@@ -13,10 +10,11 @@ import java.util.List;
 
 public class LobbyAdmin extends UnicastRemoteObject implements ILobbyAdmin{
     private ArrayList<Lobby> Lobbys;
-    private static int nextID = 100;
+    private static int nextID = 0;
     public static int getNextID(){
+        int i = nextID;
         nextID++;
-        return nextID;
+        return i;
     }
 
     // Constructor
@@ -39,9 +37,9 @@ public class LobbyAdmin extends UnicastRemoteObject implements ILobbyAdmin{
         }
     }
 
-    public Lobby addLobby(Lobby lobby) throws RemoteException {
+    public Lobby addLobby(String name) throws RemoteException {
+        Lobby lobby = new Lobby(name, getNextID());
         Lobbys.add(lobby);
-        nextID++;
         System.out.println("LobbyAdmin: Lobby " + lobby.toString() + " added to Lobby administration");
         return lobby;
     }

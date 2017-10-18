@@ -117,12 +117,13 @@ public class RMIClient {
         }
     }
 
-    public void addLobby(Lobby lobby){
+    public Lobby addLobby(String name){
         try{
-            lobbyAdmin.addLobby(lobby);
+            return lobbyAdmin.addLobby(name);
         }
         catch(RemoteException ex){
             System.out.println("Client: RemoteException: " + ex.getMessage());
+            return null;
         }
     }
 

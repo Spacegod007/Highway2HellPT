@@ -15,7 +15,9 @@ public class Lobby implements Runnable, Serializable{
     private String name;
     private List<User> players;
     private List<Gamerule> gamerules;
-    private static int maxSize = 64;
+    private String ipAdress;
+    private final int port = 1111;
+    private static int maxSize = 64; // static?
     public User getHost() {
         return host;
     }

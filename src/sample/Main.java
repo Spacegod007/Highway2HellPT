@@ -102,6 +102,7 @@ public class Main extends Application{
 
         listvwLobby.setLayoutX(50);
         listvwLobby.setLayoutY(150);
+        listvwLobby.getSelectionModel().selectedItemProperty().addListener(event -> viewLobby());
         listvwLobby.setItems(administration.refresh());
 
         listvwPlayers.setLayoutX(300);
@@ -111,6 +112,13 @@ public class Main extends Application{
         text.setLayoutY(0);
     }
 
+    private void viewLobby(){
+        Lobby lobby = listvwLobby.getSelectionModel().getSelectedItem();
+        if(lobby != null){
+            System.out.println(lobby.getId());
+            listvwPlayers.setItems(lobby.getPlayers());
+        }
+    }
     private void hostLobby(){
         try{
             administration.hostLobby("testlobby");
@@ -120,6 +128,7 @@ public class Main extends Application{
             e.printStackTrace();
         }
     }
+
 
 //    private void hostLobby(){
 //        try{
