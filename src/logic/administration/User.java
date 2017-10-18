@@ -4,7 +4,10 @@ import javafx.beans.InvalidationListener;
 import javafx.beans.Observable;
 import jdk.internal.util.xml.impl.Input;
 
-public class User implements Observable {
+import java.io.Serializable;
+
+public class User implements Observable, Serializable
+{
     private String username;
 
     public String getUsername() {
