@@ -59,11 +59,11 @@ public class Game implements Runnable, Observer {
                 //Setting the borders of the map for player death.
                 //Might need some tweaking, leave to the tester.
                 PlayerObject PO = (PlayerObject)GO;
-                if(PO.getAnchor().getX() < 0 + PO.getPlayerSize()[0])
+                if(PO.getAnchor().getX() + PO.getPlayerSize()[1] < 0)
                 {
                     PO.setIsDead(true);
                 }
-                else if(PO.getAnchor().getX() > 1200)
+                else if(PO.getAnchor().getX() > 1920)
                 {
                     PO.setIsDead(true);
                 }

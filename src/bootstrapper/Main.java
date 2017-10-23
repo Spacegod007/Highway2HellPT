@@ -1,23 +1,17 @@
 package bootstrapper;
 
-import database.Contexts.DatabaseContext;
-import database.Repositories.Repository;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.Group;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
-import logic.Gamerule;
 import logic.game.*;
 
 import java.util.ArrayList;
-import java.util.Timer;
-import java.util.TimerTask;
+
 
 public class Main extends Application {
 
@@ -125,6 +119,7 @@ public class Main extends Application {
         obstacleObjects.add(new ObstacleObject(70, 48));
         obstacleObjects.add(new ObstacleObject(70, 48));
 
+        //Initiate timer for map scroll.
         AnimationTimer aTimer = new AnimationTimer() {
             @Override
             public void handle(long now) {
@@ -160,8 +155,6 @@ public class Main extends Application {
         imageView.setSmooth(true);
         imageView.setCache(true);
         imageView.setRotate(180d);
-        //imageView.setX(960);
-        //imageView.setY(900);
         return imageView;
     }
 
