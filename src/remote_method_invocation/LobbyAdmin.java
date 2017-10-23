@@ -19,7 +19,7 @@ public class LobbyAdmin extends UnicastRemoteObject implements ILobbyAdmin{
 
     // Constructor
     public LobbyAdmin() throws RemoteException {
-        Lobbys = new ArrayList<Lobby>();
+        Lobbys = new ArrayList<>();
     }
 
     public int getNumberOfLobbies() throws RemoteException {

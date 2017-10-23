@@ -25,11 +25,7 @@ public class Administration
     public boolean joinLobby(Lobby lobby){
         try
         {
-            if(rmiClient.joinLobby(lobby, user))
-            {
-               return true;
-            }
-            return false;
+            return rmiClient.joinLobby(lobby, user);
         }
         catch(Exception e)
         {

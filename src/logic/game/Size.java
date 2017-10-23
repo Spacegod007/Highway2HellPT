@@ -1,7 +1,7 @@
 package logic.game;
 
 /**
- * determens the size of objects
+ * the size of objects
  */
 public class Size
 {

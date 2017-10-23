@@ -168,7 +168,8 @@ public class RMIClient {
             System.out.println("Client: Cannot connect");
             System.out.println("Client: RemoteException: " + ex.getMessage());
     }
-    };
+    }
+
     private void testlobbyAdministration() {
 //        // Get number of students
 //        try {
