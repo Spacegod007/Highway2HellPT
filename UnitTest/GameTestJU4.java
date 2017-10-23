@@ -54,7 +54,7 @@ public class GameTestJU4 {
         game.update();
 
         //Re-Assert
-        assertEquals(902d, game.getGameObjects().get(0).getAnchor().getY(), 0.0001);
+        assertEquals(901d, game.getGameObjects().get(0).getAnchor().getY(), 0.0001);
 
         //Assert isDead is false
         PlayerObject isNotDead = (PlayerObject)game.getGameObjects().get(0);
@@ -66,7 +66,7 @@ public class GameTestJU4 {
         game.update();
         assertEquals(true, po.getisDead());
 
-        game.getGameObjects().get(1).setAnchor(new Point(1300, 100));
+        game.getGameObjects().get(1).setAnchor(new Point(1980, 100));
         PlayerObject po2 = (PlayerObject)game.getGameObjects().get(1);
         game.update();
         assertEquals(true, po2.getisDead());
