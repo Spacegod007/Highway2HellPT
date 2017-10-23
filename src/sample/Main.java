@@ -31,6 +31,7 @@ public class Main extends Application{
     private Button btnJoinLobby = new Button();
     private Button btnKickPlayer = new Button();
     private Button btnStartGame = new Button();
+    private Button btnLeaveLobby = new Button();
     private ListView<Lobby> listvwLobby = new ListView<>();
     private ListView<User> listvwPlayers = new ListView<User>();
     private TextField text = new TextField();
@@ -51,14 +52,13 @@ public class Main extends Application{
         {
             Repository repo = new Repository(new LocalContext());
             System.out.println("Connection to database: " + Boolean.toString(repo.testConnection()));
-            administration.setUser(new User("David"));
             root = FXMLLoader.load(getClass().getResource("main.fxml"));
             primaryStage.setTitle("Hello World");
             Canvas canvas = new Canvas(600, 600);
             ((GridPane)root).getChildren().add(canvas);
             timer = new Timer();
             setUpControls();
-            ((GridPane)root).getChildren().add(new Pane(btnHostLobby, btnJoinLobby, btnKickPlayer, btnStartGame, text, listvwLobby, listvwPlayers, btnRefresh));
+            ((GridPane)root).getChildren().add(new Pane(btnHostLobby, btnJoinLobby, btnKickPlayer, btnStartGame, btnLeaveLobby, text, listvwLobby, listvwPlayers, btnRefresh));
             primaryStage.setScene(new Scene(root, 600, 600));
             primaryStage.show();
 
@@ -71,7 +71,6 @@ public class Main extends Application{
 
     private void refreshLobbies()
     {
-        System.out.println("refreshing");
         Lobby lobby = listvwLobby.getSelectionModel().getSelectedItem();
         User player = listvwPlayers.getSelectionModel().getSelectedItem();
         listvwLobby.setItems(administration.refresh());
@@ -101,6 +100,12 @@ public class Main extends Application{
         btnJoinLobby.setPrefWidth(150);
         btnJoinLobby.setText("Join lobby");
         btnJoinLobby.setOnAction(event -> joinLobby());
+
+        btnLeaveLobby.setLayoutX(450);
+        btnLeaveLobby.setLayoutY(0);
+        btnLeaveLobby.setPrefWidth(150);
+        btnLeaveLobby.setText("Leave lobby");
+        btnLeaveLobby.setOnAction(event -> leaveLobby());
 
         btnKickPlayer.setLayoutX(0);
         btnKickPlayer.setLayoutY(550);
@@ -145,7 +150,6 @@ public class Main extends Application{
     private void viewLobby(User player){
         Lobby lobby = listvwLobby.getSelectionModel().getSelectedItem();
         if(lobby != null){
-            System.out.println(lobby.getId());
             listvwPlayers.setItems(lobby.getPlayers());
             if(player != null)
             {
@@ -201,6 +205,18 @@ public class Main extends Application{
         catch(Exception e)
         {
             e.printStackTrace();
+        }
+    }
+
+    private void leaveLobby()
+    {
+        try
+        {
+            administration.leaveLobby();
+        }
+        catch(Exception e)
+        {
+
         }
     }
 

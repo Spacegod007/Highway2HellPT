@@ -48,6 +48,24 @@ public class Lobby implements Runnable, Serializable{
         this.nextPlayerId = 0;
     }
 
+    public boolean leave(User player){
+        try
+        {
+            for(User p : players){
+                if(p.getID() == player.getID())
+                {
+                    this.players.remove(p);
+                    return true;
+                }
+            }
+            return false;
+        }
+        catch(Exception e)
+        {
+            return false;
+        }
+    }
+
     public boolean join(User player){
         try
         {
@@ -66,7 +84,6 @@ public class Lobby implements Runnable, Serializable{
         {
             return false;
         }
-        //throw new UnsupportedOperationException();
     }
 
     public boolean kickPlayer(int index)

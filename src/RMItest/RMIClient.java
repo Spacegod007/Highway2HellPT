@@ -24,6 +24,11 @@ public class RMIClient {
 
     // Set binding name for lobby administration
     private static final String bindingName = "LobbyAdmin";
+    private User user;
+    public User getUser()
+    {
+        return user;
+    }
 
     // References to registry and lobby administration
     private Registry registry = null;
@@ -95,6 +100,14 @@ public class RMIClient {
         // Test RMI connection
         if (lobbyAdmin != null) {
             testConnection();
+            try
+            {
+                user = lobbyAdmin.addUser("David");
+            }
+            catch(RemoteException ex)
+            {
+                System.out.println("Client: can't bind user to client");
+            }
             //testlobbyAdministration();
         }
     }
@@ -144,7 +157,7 @@ public class RMIClient {
         return i;
     }
 
-    public boolean joinLobby(Lobby lobby, User user)
+    public boolean joinLobby(Lobby lobby)
     {
         try{
             return lobbyAdmin.joinLobby(lobby, user);
@@ -152,6 +165,42 @@ public class RMIClient {
         catch(RemoteException ex){
             System.out.println("Client: RemoteException: " + ex.getMessage());
             return false;
+        }
+    }
+
+    public boolean leaveLobby(Lobby lobby)
+    {
+        try{
+            if(lobbyAdmin.leaveLobby(lobby, user)){
+                System.out.println("Success(RMI)");
+                return true;
+            }
+            return false;
+        }
+        catch(RemoteException ex){
+            System.out.println("Client: RemoteException: " + ex.getMessage());
+            return false;
+        }
+    }
+
+    public Lobby getActiveLobby()
+    {
+        try{
+            return lobbyAdmin.getActiveLobby(user);
+        }
+        catch(RemoteException ex){
+            System.out.println("Client: RemoteException: " + ex.getMessage());
+            return null;
+        }
+    }
+
+    public void setActiveLobby(Lobby lobby)
+    {
+        try{
+            lobbyAdmin.setActiveLobby(user, lobby);
+        }
+        catch(RemoteException ex){
+            System.out.println("Client: RemoteException: " + ex.getMessage());
         }
     }
 
