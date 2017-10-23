@@ -22,9 +22,6 @@ import java.io.IOException;
 import java.util.Scanner;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
 
 public class Main extends Application{
 
@@ -205,9 +202,6 @@ public class Main extends Application{
         {
             e.printStackTrace();
         }
-    }
-    private void addTestPlayers(){
-        text.setText("Addtestplayer");
     }
 
     private void kickPlayer()
