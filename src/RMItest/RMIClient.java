@@ -38,16 +38,16 @@ public class RMIClient {
     {
         String ip = properties.getProperty("ipAddress");
         int port = Integer.parseInt(properties.getProperty("port"));
-        callCLient(ip, port);
+        callClient(ip, port);
     }
 
     // Constructor
     public RMIClient(String ipAddress, int portNumber)
     {
-        callCLient(ipAddress, portNumber);
+        callClient(ipAddress, portNumber);
     }
 
-    private void callCLient(String ipAddress, int portNumber)
+    private void callClient(String ipAddress, int portNumber)
     {
         // Print IP address and port number for registry
         System.out.println("Client: IP Address: " + ipAddress);
@@ -247,7 +247,7 @@ public class RMIClient {
         int portNumber = input.nextInt();
 
         // Create client
-        RMIClient client = new RMIClient(ipAddress, portNumber);
+        new RMIClient(ipAddress, portNumber);
     }
 
     public static Properties getConnectionProperties()

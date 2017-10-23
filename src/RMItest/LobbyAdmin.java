@@ -9,8 +9,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class LobbyAdmin extends UnicastRemoteObject implements ILobbyAdmin{
-    private ArrayList<Lobby> Lobbys;
-    private ArrayList<User> Users;
+    private ArrayList<Lobby> lobbys;
+    private ArrayList<User> users;
     private static int nextID = 0;
     private static int nextUserID = 0;
     static int getNextID(){
@@ -26,19 +26,19 @@ public class LobbyAdmin extends UnicastRemoteObject implements ILobbyAdmin{
 
     // Constructor
     public LobbyAdmin() throws RemoteException {
-        Lobbys = new ArrayList<>();
-        Users = new ArrayList<>();
+        lobbys = new ArrayList<>();
+        users = new ArrayList<>();
     }
 
     public int getNumberOfLobbies() throws RemoteException {
         System.out.println("LobbyAdmin: Request for number of Lobbies");
-        return Lobbys.size();
+        return lobbys.size();
     }
 
     public Lobby getLobby(int nr) throws RemoteException {
         System.out.println("LobbyAdmin: Request for Lobby with number " + nr);
-        if (nr >= 0 && nr < Lobbys.size()) {
-            return Lobbys.get(nr);
+        if (nr >= 0 && nr < lobbys.size()) {
+            return lobbys.get(nr);
         }
         else {
             return null;
@@ -47,14 +47,14 @@ public class LobbyAdmin extends UnicastRemoteObject implements ILobbyAdmin{
 
     public Lobby addLobby(String name) throws RemoteException {
         Lobby lobby = new Lobby(name, getNextID());
-        Lobbys.add(lobby);
+        lobbys.add(lobby);
         System.out.println("LobbyAdmin: Lobby " + lobby.toString() + " added to Lobby administration");
         return lobby;
     }
 
     public boolean leaveLobby(Lobby lobby, User user)
     {
-        for(Lobby l : Lobbys)
+        for(Lobby l : lobbys)
         {
             if(l.getId() == lobby.getId()){
                 return l.leave(user);
@@ -65,12 +65,12 @@ public class LobbyAdmin extends UnicastRemoteObject implements ILobbyAdmin{
 
     public List<Lobby> getLobbies() throws RemoteException
     {
-        return Lobbys;
+        return lobbys;
     }
 
     public boolean joinLobby(Lobby lobby, User user)
     {
-        for(Lobby l : Lobbys)
+        for(Lobby l : lobbys)
         {
             if(l.getId() == lobby.getId()){
                 return l.join(user);
@@ -81,16 +81,16 @@ public class LobbyAdmin extends UnicastRemoteObject implements ILobbyAdmin{
 
     public boolean kickPlayer(int l, int index)
     {
-        return (Lobbys.get(l)).kickPlayer(index);
+        return (lobbys.get(l)).kickPlayer(index);
     }
 
     public Lobby setActiveLobby(User user, Lobby lobby)
     {
         if(lobby != null)
         {
-            for(Lobby l : Lobbys){
+            for(Lobby l : lobbys){
                 if(l.getId() == lobby.getId())
-                {  for(User u : Users){
+                {  for(User u : users){
                     if(u.getID() == user.getID())
                     {
                         u.setActiveLobby(l);
@@ -100,7 +100,7 @@ public class LobbyAdmin extends UnicastRemoteObject implements ILobbyAdmin{
             }
         }
         else{
-            for(User u : Users){
+            for(User u : users){
                 if(u.getID() == user.getID())
                 {
                     u.setActiveLobby(null);
@@ -113,13 +113,13 @@ public class LobbyAdmin extends UnicastRemoteObject implements ILobbyAdmin{
     public User addUser(String username)
     {
         User user = new User(username, getNextUserID());
-        Users.add(user);
+        users.add(user);
         return user;
     }
 
     public Lobby getActiveLobby(User user)
     {
-        for(User u : Users)
+        for(User u : users)
         {
             if(u.getID() == user.getID())
             {
