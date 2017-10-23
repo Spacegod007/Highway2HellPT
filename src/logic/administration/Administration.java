@@ -22,6 +22,22 @@ public class Administration
         this.user = user;
     }
 
+    public boolean kickPlayer(int l, int index) {
+        try
+        {
+            if(rmiClient.kickPlayer(l, index))
+            {
+                return true;
+            }
+            return false;
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
     public boolean joinLobby(Lobby lobby){
         try
         {

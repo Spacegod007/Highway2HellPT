@@ -13,4 +13,5 @@ public interface ILobbyAdmin extends Remote {
     Lobby addLobby(String lobby) throws RemoteException;
     List<Lobby> getLobbies() throws RemoteException;
     boolean joinLobby(Lobby lobby, User user) throws RemoteException;
+    boolean kickPlayer(int l, int index) throws RemoteException;
 }

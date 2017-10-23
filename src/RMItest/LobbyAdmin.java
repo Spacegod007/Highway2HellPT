@@ -59,4 +59,9 @@ public class LobbyAdmin extends UnicastRemoteObject implements ILobbyAdmin{
         }
         return false;
     }
+
+    public boolean kickPlayer(int l, int index)
+    {
+        return (Lobbys.get(l)).kickPlayer(index);
+    }
 }

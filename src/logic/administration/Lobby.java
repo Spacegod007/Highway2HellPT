@@ -64,6 +64,20 @@ public class Lobby implements Runnable, Serializable{
         }
         //throw new UnsupportedOperationException();
     }
+
+    public boolean kickPlayer(int index)
+    {
+        try
+        {
+            this.players.remove(index);
+            return true;
+        }
+        catch (Exception e)
+        {
+            return false;
+        }
+    }
+
     public void editGameRules(){
         throw new UnsupportedOperationException();
     }

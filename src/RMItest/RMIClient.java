@@ -155,6 +155,17 @@ public class RMIClient {
         }
     }
 
+    public boolean kickPlayer(int l, int index)
+    {
+        try{
+            return lobbyAdmin.kickPlayer(l, index);
+        }
+        catch(RemoteException ex){
+            System.out.println("Client: RemoteException: " + ex.getMessage());
+            return false;
+        }
+    }
+
     // Test RMI connection
     private void testConnection()
     {
@@ -168,28 +179,8 @@ public class RMIClient {
             System.out.println("Client: Cannot connect");
             System.out.println("Client: RemoteException: " + ex.getMessage());
     }
-    };
-    private void testlobbyAdministration() {
-//        // Get number of students
-//        try {
-//            System.out.println("Client: Number of lobbies: " + lobbyAdmin.getNumberOfLobbies());
-//        } catch (RemoteException ex) {
-//            System.out.println("Client: Cannot get number of lobbies");
-//            System.out.println("Client: RemoteException: " + ex.getMessage());
-//        }
-//        try {
-//            System.out.println("Client: Addlobby: " + lobbyAdmin.addLobby(new Lobby("test")));
-//        } catch (RemoteException ex) {
-//            System.out.println("Client: Cannot add lobby");
-//            System.out.println("Client: RemoteException: " + ex.getMessage());
-//        }
-//        try {
-//            System.out.println("Client: Number of lobbies: " + lobbyAdmin.getNumberOfLobbies());
-//        } catch (RemoteException ex) {
-//            System.out.println("Client: Cannot get number of lobbies");
-//            System.out.println("Client: RemoteException: " + ex.getMessage());
-//        }
     }
+
 
     // Main method
     public static void main(String[] args) {

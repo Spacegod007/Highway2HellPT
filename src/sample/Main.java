@@ -66,6 +66,7 @@ public class Main extends Application{
     private void refreshLobbies()
     {
         listvwLobby.setItems(administration.refresh());
+        viewLobby();
     }
 
     private void setUpControls()
@@ -129,38 +130,6 @@ public class Main extends Application{
         }
     }
 
-
-//    private void hostLobby(){
-//        try{
-//            text.setText("Host lobby");
-//            //code for new window
-//            administration.hostLobby();
-//            listvwPlayers.setItems(administration.getLobby().getPlayers());
-//
-//        }
-//        catch(Exception e)
-//        {
-//            e.printStackTrace();
-//            text.setText(e.toString());
-//        }
-//
-//    }
-//    private void joinLobby(){
-//        try{
-//            text.setText("Join lobby");
-//            //code for new window
-//            Lobby l = listvwLobby.getSelectionModel().getSelectedItem();
-//            if(l != null){administration.joinLobby(l);}
-//            else{text.setText("Nothing selected");}
-//            listvwLobby.setDisable(true);
-//            listvwPlayers.setItems(administration.getLobby().getPlayers());
-//        }
-//        catch(Exception e)//IOException e
-//        {
-//            e.printStackTrace();
-//            text.setText(e.toString());
-//        }
-//    }
     private void joinLobby()
     {
         try
@@ -198,7 +167,25 @@ public class Main extends Application{
 
     private void kickPlayer()
     {
-        //
+        try
+        {
+            User player = listvwPlayers.getSelectionModel().getSelectedItem();
+            if(player != null)
+            {
+                int l = listvwLobby.getSelectionModel().getSelectedIndex();
+                int index = listvwPlayers.getSelectionModel().getSelectedIndex();
+                administration.kickPlayer(l, index);
+                viewLobby();
+            }
+            else
+            {
+                System.out.println("No player selected");
+            }
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+        }
     }
     private void startGame(){
         text.setText("Startgame");
