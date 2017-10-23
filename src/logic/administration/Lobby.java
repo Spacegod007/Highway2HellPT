@@ -18,6 +18,7 @@ public class Lobby implements Runnable, Serializable{
     private String ipAdress;
     private final int port = 1111;
     private static int maxSize = 64; // static?
+    private int nextPlayerId;
     public User getHost() {
         return host;
     }
@@ -44,6 +45,7 @@ public class Lobby implements Runnable, Serializable{
         gamerules = new ArrayList<>();
         this.name = name;
         this.id = id;
+        this.nextPlayerId = 0;
     }
 
     public boolean join(User player){
@@ -55,6 +57,8 @@ public class Lobby implements Runnable, Serializable{
                 setHost(player);
             }
             this.players.add(player);
+            player.setIdInLobby(nextPlayerId);
+            nextPlayerId++;
             System.out.println("Player added: " + player.toString());
             return true;
         }

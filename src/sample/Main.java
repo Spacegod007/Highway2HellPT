@@ -3,6 +3,7 @@ package sample;
 import database.Contexts.LocalContext;
 import database.Repositories.Repository;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -19,6 +20,11 @@ import logic.administration.User;
 
 import java.io.IOException;
 import java.util.Scanner;
+import java.util.Timer;
+import java.util.TimerTask;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 public class Main extends Application{
 
@@ -33,6 +39,7 @@ public class Main extends Application{
     private TextField text = new TextField();
     private Button btnRefresh = new Button();
     private Parent root; //niet converten naar local nog plz
+    Timer timer;
 
     public static void launchView(String[] args, Administration admin)
     {
@@ -52,10 +59,12 @@ public class Main extends Application{
             primaryStage.setTitle("Hello World");
             Canvas canvas = new Canvas(600, 600);
             ((GridPane)root).getChildren().add(canvas);
+            timer = new Timer();
             setUpControls();
             ((GridPane)root).getChildren().add(new Pane(btnHostLobby, btnJoinLobby, btnKickPlayer, btnStartGame, text, listvwLobby, listvwPlayers, btnRefresh));
             primaryStage.setScene(new Scene(root, 600, 600));
             primaryStage.show();
+
         }
         catch(IOException e)
         {
@@ -65,8 +74,21 @@ public class Main extends Application{
 
     private void refreshLobbies()
     {
+        System.out.println("refreshing");
+        Lobby lobby = listvwLobby.getSelectionModel().getSelectedItem();
+        User player = listvwPlayers.getSelectionModel().getSelectedItem();
         listvwLobby.setItems(administration.refresh());
-        viewLobby();
+        if(lobby != null)
+        {
+           for(Lobby l : listvwLobby.getItems())
+           {
+                if(l.getId() == lobby.getId()){
+                    listvwLobby.getSelectionModel().select(l);
+                }
+            }
+        }
+        viewLobby(player);
+
     }
 
     private void setUpControls()
@@ -103,7 +125,7 @@ public class Main extends Application{
 
         listvwLobby.setLayoutX(50);
         listvwLobby.setLayoutY(150);
-        listvwLobby.getSelectionModel().selectedItemProperty().addListener(event -> viewLobby());
+        listvwLobby.getSelectionModel().selectedItemProperty().addListener(event -> viewLobby(null));
         listvwLobby.setItems(administration.refresh());
 
         listvwPlayers.setLayoutX(300);
@@ -111,15 +133,38 @@ public class Main extends Application{
 
         text.setLayoutX(300);
         text.setLayoutY(0);
+
+        timer.schedule(new TimerTask() {
+            public void run() {
+                Platform.runLater(() -> refresh());
+            }
+        }, 2000, 1000);
     }
 
-    private void viewLobby(){
+    private void refresh(){
+        refreshLobbies();
+    }
+
+    private void viewLobby(User player){
         Lobby lobby = listvwLobby.getSelectionModel().getSelectedItem();
         if(lobby != null){
             System.out.println(lobby.getId());
             listvwPlayers.setItems(lobby.getPlayers());
+            if(player != null)
+            {
+                for(User p : listvwPlayers.getItems())
+                {
+                    System.out.print(p.getIdInLobby());
+                    System.out.println(", " + player.getIdInLobby());
+                    if(p.getIdInLobby() == player.getIdInLobby()){
+                        System.out.println("selected");
+                        listvwPlayers.getSelectionModel().select(p);
+                    }
+                }
+            }
         }
     }
+
     private void hostLobby(){
         try{
             administration.hostLobby("testlobby");
@@ -175,7 +220,7 @@ public class Main extends Application{
                 int l = listvwLobby.getSelectionModel().getSelectedIndex();
                 int index = listvwPlayers.getSelectionModel().getSelectedIndex();
                 administration.kickPlayer(l, index);
-                viewLobby();
+                viewLobby(null);
             }
             else
             {
