@@ -1,25 +1,20 @@
 package bootstrapper;
 
-import database.Contexts.DatabaseContext;
-import database.Repositories.Repository;
+import javafx.animation.AnimationTimer;
 import javafx.application.Application;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.Group;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
-import logic.Gamerule;
 import logic.game.Direction;
 import logic.game.Game;
 import logic.game.PlayerObject;
 import logic.game.Point;
 
 import java.util.ArrayList;
-import java.util.Timer;
-import java.util.TimerTask;
+
 
 public class Main extends Application {
 
@@ -41,6 +36,7 @@ public class Main extends Application {
     public void start(Stage primaryStage) throws Exception{
         playerImage.add(addImageView());
         playerImage.add(addImageView());
+
 
         for(ImageView player : playerImage)
         {
@@ -118,20 +114,22 @@ public class Main extends Application {
         PO1 = game.moveCharacter("Player1", Direction.RIGHT);
         PO2 = game.moveCharacter("Player2", Direction.D);
 
-
         //Initiate timer for map scroll.
-        Timer timer = new Timer();
-        timer.scheduleAtFixedRate(new TimerTask() {
+        AnimationTimer aTimer = new AnimationTimer() {
             @Override
-            public void run() {
+            public void handle(long now) {
                 game.update();
                 playerImage.get(1).setX(PO2.getAnchor().getX());
                 playerImage.get(1).setY(PO2.getAnchor().getY());
                 playerImage.get(0).setX(PO1.getAnchor().getX());
                 playerImage.get(0).setY(PO1.getAnchor().getY());
-            }
-        }, 0, 33);
 
+                //Debugging remove before publishing
+                System.out.println("P1: " + PO1.getAnchor());
+                System.out.println("P2: " + PO2.getAnchor());
+            }
+        };
+        aTimer.start();
         primaryStage.show();
     }
 
@@ -144,8 +142,6 @@ public class Main extends Application {
         imageView.setSmooth(true);
         imageView.setCache(true);
         imageView.setRotate(180d);
-        //imageView.setX(960);
-        //imageView.setY(900);
         return imageView;
     }
 
