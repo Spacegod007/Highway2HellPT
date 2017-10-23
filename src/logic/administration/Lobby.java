@@ -75,7 +75,6 @@ public class Lobby implements Runnable, Serializable{
                 setHost(player);
             }
             this.players.add(player);
-            player.setIdInLobby(nextPlayerId);
             nextPlayerId++;
             System.out.println("Player added: " + player.toString());
             return true;

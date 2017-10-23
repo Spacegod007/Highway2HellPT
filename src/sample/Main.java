@@ -155,10 +155,7 @@ public class Main extends Application{
             {
                 for(User p : listvwPlayers.getItems())
                 {
-                    System.out.print(p.getIdInLobby());
-                    System.out.println(", " + player.getIdInLobby());
-                    if(p.getIdInLobby() == player.getIdInLobby()){
-                        System.out.println("selected");
+                    if(p.getID() == player.getID()){
                         listvwPlayers.getSelectionModel().select(p);
                     }
                 }

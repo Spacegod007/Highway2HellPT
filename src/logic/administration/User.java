@@ -7,7 +7,6 @@ public class User implements Serializable
 {
     private String username;
     private int ID;
-    private int idInLobby;
     private Lobby activeLobby;
 
     public int getID()
@@ -22,15 +21,6 @@ public class User implements Serializable
     public void setActiveLobby(Lobby activeLobby)
     {
         this.activeLobby = activeLobby;
-    }
-
-    public int getIdInLobby()
-    {
-        return idInLobby;
-    };
-    public void setIdInLobby(int i)
-    {
-        this.idInLobby = i;
     }
 
     public String getUsername() {
