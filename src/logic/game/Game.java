@@ -12,7 +12,7 @@ import java.util.Observer;
 public class Game implements Runnable, Observer {
     private List<GameObject> GameObjects;
     private List<Gamerule> gamerules;
-    private double scrollSpeed = 2;
+    private double scrollSpeed = 1;
     private int obstacleCount = 2;
 
     public Game(List<Gamerule> gamerules) {

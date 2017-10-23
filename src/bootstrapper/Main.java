@@ -2,6 +2,7 @@ package bootstrapper;
 
 import database.Contexts.DatabaseContext;
 import database.Repositories.Repository;
+import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Group;
@@ -84,8 +85,7 @@ public class Main extends Application {
                     }
                     break;
                 case RIGHT:
-                    if(!rightPressed)
-                    {
+                    if (!rightPressed) {
                         PO1 = game.moveCharacter("Player1", Direction.RIGHT);
                         playerImageView.get(0).setRotate(PO1.getCurrentRotation());
                         playerImageView.get(0).setX(PO1.getAnchor().getX());
@@ -94,8 +94,7 @@ public class Main extends Application {
                     }
                     break;
                 case A:
-                    if(!aPressed)
-                    {
+                    if (!aPressed) {
                         PO2 = game.moveCharacter("Player2", Direction.A);
                         playerImageView.get(1).setRotate(PO2.getCurrentRotation());
                         playerImageView.get(1).setX(PO2.getAnchor().getX());
@@ -104,8 +103,7 @@ public class Main extends Application {
                     }
                     break;
                 case D:
-                    if(!dPressed)
-                    {
+                    if (!dPressed) {
                         PO2 = game.moveCharacter("Player2", Direction.D);
                         playerImageView.get(1).setRotate(PO2.getCurrentRotation());
                         playerImageView.get(1).setX(PO2.getAnchor().getX());
@@ -119,7 +117,6 @@ public class Main extends Application {
         primaryStage.setWidth(1920);
         primaryStage.setHeight(1080);
         primaryStage.setMaximized(true);
-        scene.setFill(Color.RED);
         primaryStage.setScene(scene);
 
         //Initialize first frame
@@ -128,11 +125,9 @@ public class Main extends Application {
         obstacleObjects.add(new ObstacleObject(70, 48));
         obstacleObjects.add(new ObstacleObject(70, 48));
 
-        //Initiate timer for map scroll.
-        Timer timer = new Timer();
-        timer.scheduleAtFixedRate(new TimerTask() {
+        AnimationTimer aTimer = new AnimationTimer() {
             @Override
-            public void run() {
+            public void handle(long now) {
                 game.update();
                 playerImageView.get(1).setX(PO2.getAnchor().getX());
                 playerImageView.get(1).setY(PO2.getAnchor().getY());
@@ -145,31 +140,14 @@ public class Main extends Application {
 
                 obstacleObjects = game.returnObstacleObjects();
 
-                for(int i=0; i < obstacleObjects.size(); i++)
-                {
+                for (int i = 0; i < obstacleObjects.size(); i++) {
                     obstacleImageView.get(i).setX(obstacleObjects.get(i).getAnchor().getX());
                     obstacleImageView.get(i).setY(obstacleObjects.get(i).getAnchor().getY());
                     System.out.println(obstacleObjects.get(i).getAnchor().getY());
                 }
-
-                /*int index = 0;
-                for (ObstacleObject OO : obstacleObjects)
-                {
-                    System.out.println(index);
-                    System.out.println(obstacleObjects.());
-                    obstacleImageView.get(index).setX(OO.getAnchor().getX());
-                    obstacleImageView.get(index).setY(OO.getAnchor().getY());
-                    index++;
-                    if (index == obstacleObjects.size())
-                    {
-                        index = 0;
-                    }
-                    System.out.println(index);
-                }
-                */
             }
-        }, 0, 22);
-
+        };
+        aTimer.start();
         primaryStage.show();
     }
 
@@ -195,8 +173,6 @@ public class Main extends Application {
         imageView.setPreserveRatio(true);
         imageView.setSmooth(true);
         imageView.setCache(true);
-        //imageView.setX(960);
-        //imageView.setY(900);
         return imageView;
     }
 
