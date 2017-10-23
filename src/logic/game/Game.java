@@ -75,6 +75,13 @@ public class Game implements Runnable, Observer {
                 {
                     PO.setIsDead(true);
                 }
+
+                for (GameObject GO2: GameObjects) {
+                    if(GO2.getClass() == ObstacleObject.class && PO.checkForObstacleCollision((ObstacleObject) GO2)) {
+                        PO.setIsDead(true);
+                        System.out.println("RIP");
+                    }
+                }
             }
 
             if (GO.getClass() == ObstacleObject.class)

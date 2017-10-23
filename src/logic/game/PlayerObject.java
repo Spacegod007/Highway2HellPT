@@ -95,4 +95,19 @@ public class PlayerObject extends GameObject {
             }
         }
     }
+
+    public boolean checkForObstacleCollision(ObstacleObject OO) {
+        double POX = this.getAnchor().getX();
+        double POY = this.getAnchor().getY();
+        double POXWithWidth = POX + this.getPlayerSize()[0];
+        double POYWithHeight = POY + this.getPlayerSize()[1];
+
+        double OOX = OO.getAnchor().getX();
+        double OOY = OO.getAnchor().getY();
+        double OOXWithWidth = OOX + OO.getWidth();
+        double OOYWithHeight = OOY + OO.getHeight();
+
+        return POX >= OOX && POX <= OOXWithWidth && POY >= OOY && POY <= OOYWithHeight ||
+                POXWithWidth >= OOX && POXWithWidth <= OOXWithWidth && POYWithHeight >= OOY && POYWithHeight <= OOYWithHeight;
+    }
 }
