@@ -1,6 +1,6 @@
 package bootstrapper;
 
-import remote_method_invocation.RMIClient;
+import logic.remote_method_invocation.RMIClient;
 import logic.administration.Administration;
 import sample.Main;
 

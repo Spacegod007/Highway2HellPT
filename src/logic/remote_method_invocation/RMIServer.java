@@ -1,5 +1,5 @@
 
-package remote_method_invocation;
+package logic.remote_method_invocation;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;

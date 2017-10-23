@@ -1,6 +1,6 @@
 package logic.administration;
 
-import remote_method_invocation.RMIClient;
+import logic.remote_method_invocation.RMIClient;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
