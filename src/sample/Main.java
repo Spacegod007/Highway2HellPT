@@ -168,11 +168,13 @@ public class Main extends Application{
             Lobby lobby = listvwLobby.getSelectionModel().getSelectedItem();
             if(lobby != null)
             {
+                int i = listvwLobby.getSelectionModel().getSelectedIndex();
                 if(administration.joinLobby(lobby))
                 {
                     //success join lobby
                     System.out.println("Successful join");
                     listvwLobby.setItems(administration.refresh());
+                    listvwLobby.getSelectionModel().select(i);
                 }
                 else
                 {

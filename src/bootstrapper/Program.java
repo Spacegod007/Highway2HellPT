@@ -27,3 +27,4 @@ public class Program
         Main.launchView(args, administration);
     }
 }
+
