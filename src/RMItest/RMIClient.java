@@ -80,11 +80,11 @@ public class RMIClient {
             try {
                 lobbyAdmin = (ILobbyAdmin) registry.lookup(bindingName);
             } catch (RemoteException ex) {
-                System.out.println("Client: Cannot bind student administration");
+                System.out.println("Client: Cannot bind lobby administration");
                 System.out.println("Client: RemoteException: " + ex.getMessage());
                 lobbyAdmin = null;
             } catch (NotBoundException ex) {
-                System.out.println("Client: Cannot bind student administration");
+                System.out.println("Client: Cannot bind lobby administration");
                 System.out.println("Client: NotBoundException: " + ex.getMessage());
                 lobbyAdmin = null;
             }
