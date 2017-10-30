@@ -13,7 +13,7 @@ public class Game implements Runnable, Observer {
     private List<GameObject> GameObjects;
     private List<Gamerule> gamerules;
     private double scrollSpeed = 1.5;
-    private int obstacleCount = 2;
+    private int obstacleCount = 8;
 
     public Game(List<Gamerule> gamerules) {
         this.gamerules = gamerules;

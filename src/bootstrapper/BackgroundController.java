@@ -23,13 +23,13 @@ public class BackgroundController {
 	public void initialize() {
 		
 		TranslateTransition translateTransition =
-				new TranslateTransition(Duration.millis(15000), background1);
+				new TranslateTransition(Duration.millis(22500), background1);
 		translateTransition.setFromY(0);
 		translateTransition.setToY(1 * backgroundHeight);
 		translateTransition.setInterpolator(Interpolator.LINEAR);
 	
 		TranslateTransition translateTransition2 =
-            new TranslateTransition(Duration.millis(15000), background2);
+            new TranslateTransition(Duration.millis(22500), background2);
 		translateTransition2.setFromY(0);
 		translateTransition2.setToY(1 * backgroundHeight);
 		translateTransition2.setInterpolator(Interpolator.LINEAR);

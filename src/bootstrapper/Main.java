@@ -23,6 +23,7 @@ public class Main extends Application {
     private PlayerObject PO2 = new PlayerObject(new Point(860, 900),"Player2", Color.BLACK);
     private ArrayList<ObstacleObject> obstacleObjects = new ArrayList<>();
     private Image playerImage = new Image("characters/character_black_blue.png");
+    private Image playerImage2 = new Image("characters/character_blonde_red.png");
     private Image obstacleImage = new Image("objects/barrel_red_down.png");
     private ArrayList<ImageView> playerImageView = new ArrayList<>();
     private ArrayList<ImageView> obstacleImageView = new ArrayList<>();
@@ -52,6 +53,13 @@ public class Main extends Application {
         // player movement
         playerImageView.add(addPlayerImageView());
         playerImageView.add(addPlayerImageView());
+        playerImageView.get(1).setImage(playerImage2);
+        obstacleImageView.add(addObstacleImageView());
+        obstacleImageView.add(addObstacleImageView());
+        obstacleImageView.add(addObstacleImageView());
+        obstacleImageView.add(addObstacleImageView());
+        obstacleImageView.add(addObstacleImageView());
+        obstacleImageView.add(addObstacleImageView());
         obstacleImageView.add(addObstacleImageView());
         obstacleImageView.add(addObstacleImageView());
 
@@ -130,6 +138,12 @@ public class Main extends Application {
         //Initialize first frame
         PO1 = game.moveCharacter("Player1", Direction.RIGHT);
         PO2 = game.moveCharacter("Player2", Direction.D);
+        obstacleObjects.add(new ObstacleObject(70, 48));
+        obstacleObjects.add(new ObstacleObject(70, 48));
+        obstacleObjects.add(new ObstacleObject(70, 48));
+        obstacleObjects.add(new ObstacleObject(70, 48));
+        obstacleObjects.add(new ObstacleObject(70, 48));
+        obstacleObjects.add(new ObstacleObject(70, 48));
         obstacleObjects.add(new ObstacleObject(70, 48));
         obstacleObjects.add(new ObstacleObject(70, 48));
 
