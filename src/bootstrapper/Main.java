@@ -2,10 +2,14 @@ package bootstrapper;
 
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Group;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import logic.game.*;
@@ -22,8 +26,6 @@ public class Main extends Application {
     private Image obstacleImage = new Image("objects/barrel_red_down.png");
     private ArrayList<ImageView> playerImageView = new ArrayList<>();
     private ArrayList<ImageView> obstacleImageView = new ArrayList<>();
-    private Group root = new Group();
-    private Scene scene = new Scene(root);
     private Game game = new Game(new ArrayList<>());
 
     //This is ugly because we have 4 buttons to press now.
@@ -34,6 +36,20 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception{
+
+        // background scroller
+        FXMLLoader fxmlLoader =
+                new FXMLLoader(getClass().getResource("/Background.fxml") );
+        Parent p = fxmlLoader.load();
+
+        BackgroundController c = fxmlLoader.getController();
+        Scene scene = new Scene(p);
+
+        primaryStage.setTitle( "Game" );
+        primaryStage.setOnShown( (evt) -> c.startAmination() );
+        Pane gamePane = (Pane) p.lookup("#gamePane");
+
+        // player movement
         playerImageView.add(addPlayerImageView());
         playerImageView.add(addPlayerImageView());
         obstacleImageView.add(addObstacleImageView());
@@ -41,12 +57,12 @@ public class Main extends Application {
 
         for(ImageView player : playerImageView)
         {
-            root.getChildren().add(player);
+            gamePane.getChildren().add(player);
         }
 
         for(ImageView obstacle : obstacleImageView)
         {
-            root.getChildren().add(obstacle);
+            gamePane.getChildren().add(obstacle);
         }
 
         scene.setOnKeyReleased(event -> {
@@ -107,10 +123,8 @@ public class Main extends Application {
                     break;
             }
         });
-        primaryStage.setTitle("Game");
-        primaryStage.setWidth(1920);
-        primaryStage.setHeight(1080);
-        primaryStage.setMaximized(true);
+        primaryStage.setWidth(1200);
+        primaryStage.setHeight(1000);
         primaryStage.setScene(scene);
 
         //Initialize first frame
@@ -130,7 +144,6 @@ public class Main extends Application {
                 playerImageView.get(0).setY(PO1.getAnchor().getY());
 
                 for (GameObject GO : game.getGameObjects()) {
-                    System.out.println(GO.getAnchor().getY());
                 }
 
                 obstacleObjects = game.returnObstacleObjects();
@@ -138,7 +151,6 @@ public class Main extends Application {
                 for (int i = 0; i < obstacleObjects.size(); i++) {
                     obstacleImageView.get(i).setX(obstacleObjects.get(i).getAnchor().getX());
                     obstacleImageView.get(i).setY(obstacleObjects.get(i).getAnchor().getY());
-                    System.out.println(obstacleObjects.get(i).getAnchor().getY());
                 }
             }
         };
