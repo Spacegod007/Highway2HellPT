@@ -25,7 +25,6 @@ import java.util.TimerTask;
 
 public class Main extends Application{
 
-    private Scanner input = new Scanner(System.in);
     private static Administration administration;
     private Button btnHostLobby = new Button();
     private Button btnJoinLobby = new Button();
@@ -243,10 +242,16 @@ public class Main extends Application{
             User player = listvwPlayers.getSelectionModel().getSelectedItem();
             if(player != null)
             {
-                int l = listvwLobby.getSelectionModel().getSelectedIndex();
-                int index = listvwPlayers.getSelectionModel().getSelectedIndex();
-                administration.kickPlayer(l, index);
-                viewLobby(null);
+                int id = listvwPlayers.getSelectionModel().getSelectedItem().getID();
+                if(id != administration.getUser().getID())
+                {
+                    administration.leaveLobby(id);
+                    viewLobby(null); //hier nog naar kijken
+                }
+                else
+                {
+                    System.out.println("Can't kick self");
+                }
             }
             else
             {

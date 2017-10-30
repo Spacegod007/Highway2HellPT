@@ -14,7 +14,7 @@ public class LobbyAdmin extends UnicastRemoteObject implements ILobbyAdmin{
     private static int nextID = 0;
     private static int nextUserID = 0;
 
-    private Object lobbySynchronizer = new Object();
+    private final Object lobbySynchronizer = new Object();
 
     static int getNextID(){
         int i = nextID;
@@ -59,16 +59,30 @@ public class LobbyAdmin extends UnicastRemoteObject implements ILobbyAdmin{
         return lobby;
     }
 
-    public boolean leaveLobby(Lobby lobby, User user)
+    public boolean leaveLobby(int lobbyId, int userId, int issuerId)
     {
         synchronized (lobbySynchronizer)
         {
             for (Lobby l : lobbys)
             {
 
-                if (l.getId() == lobby.getId())
+                if (l.getId() == lobbyId) //find matching lobby
                 {
-                    return l.leave(user);
+                    if(userId == issuerId || issuerId == l.getHost().getID()) //if host or self-leave
+                    {
+                        l.leave(userId);
+                        if (userId == l.getHost().getID()) //if the leaver is the host
+                        {
+                            if (l.getPlayers().size() > 0) //and there are players remaining
+                            {
+                                l.setHost(l.getPlayers().get(0)); //migrate host
+                            } else
+                            {
+                                l.setHost(null); //else, set host to null, lobby will be removed by the next tick of the timer
+                            }
+                        }
+                        return true;
+                    }
                 }
             }
         }
@@ -95,22 +109,14 @@ public class LobbyAdmin extends UnicastRemoteObject implements ILobbyAdmin{
         return false;
     }
 
-    public boolean kickPlayer(int l, int index)
-    {
-        synchronized (lobbySynchronizer)
-        {
-            return (lobbys.get(l)).kickPlayer(index);
-        }
-    }
-
-    public Lobby setActiveLobby(User user, Lobby lobby)
+    public Lobby setActiveLobby(int userId, Lobby lobby)
     {
         if(lobby != null)
         {
             for(Lobby l : lobbys){
                 if(l.getId() == lobby.getId())
                 {  for(User u : users){
-                    if(u.getID() == user.getID())
+                    if(u.getID() == userId)
                     {
                         u.setActiveLobby(l);
                     }
@@ -120,13 +126,13 @@ public class LobbyAdmin extends UnicastRemoteObject implements ILobbyAdmin{
         }
         else{
             for(User u : users){
-                if(u.getID() == user.getID())
+                if(u.getID() == userId)
                 {
                     u.setActiveLobby(null);
                 }
             }
         }
-        return getActiveLobby(user);
+        return getActiveLobby(userId);
     }
 
     public User addUser(String username)
@@ -151,11 +157,11 @@ public class LobbyAdmin extends UnicastRemoteObject implements ILobbyAdmin{
         }
     }
 
-    public Lobby getActiveLobby(User user)
+    public Lobby getActiveLobby(int userId)
     {
         for(User u : users)
         {
-            if(u.getID() == user.getID())
+            if(u.getID() == userId)
             {
                 return u.getActiveLobby();
             }

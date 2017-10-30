@@ -169,25 +169,10 @@ public class RMIClient {
         }
     }
 
-    public boolean leaveLobby(Lobby lobby)
-    {
-        try{
-            if(lobbyAdmin.leaveLobby(lobby, user)){
-                System.out.println("Success(RMI)");
-                return true;
-            }
-            return false;
-        }
-        catch(RemoteException ex){
-            System.out.println("Client: RemoteException: " + ex.getMessage());
-            return false;
-        }
-    }
-
     public Lobby getActiveLobby()
     {
         try{
-            return lobbyAdmin.getActiveLobby(user);
+            return lobbyAdmin.getActiveLobby(user.getID());
         }
         catch(RemoteException ex){
             System.out.println("Client: RemoteException: " + ex.getMessage());
@@ -195,20 +180,22 @@ public class RMIClient {
         }
     }
 
-    public void setActiveLobby(Lobby lobby)
+    public void setActiveLobby(Lobby lobby, int userId)
     {
         try{
-            lobbyAdmin.setActiveLobby(user, lobby);
+            lobbyAdmin.setActiveLobby(userId, lobby);
         }
         catch(RemoteException ex){
             System.out.println("Client: RemoteException: " + ex.getMessage());
         }
     }
 
-    public boolean kickPlayer(int l, int index)
+    public boolean leaveLobby(int lobby, int id)
     {
         try{
-            return lobbyAdmin.kickPlayer(l, index);
+            lobbyAdmin.leaveLobby(lobby, id, this.user.getID());
+            setActiveLobby(null, id);
+            return true;
         }
         catch(RemoteException ex){
             System.out.println("Client: RemoteException: " + ex.getMessage());

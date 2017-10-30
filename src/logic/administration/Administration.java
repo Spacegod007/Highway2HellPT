@@ -33,28 +33,12 @@ public class Administration
         this.user = user;
     }
 
-    public boolean kickPlayer(int l, int index) {
-        try
-        {
-            if(rmiClient.kickPlayer(l, index))
-            {
-                return true;
-            }
-            return false;
-        }
-        catch(Exception e)
-        {
-            e.printStackTrace();
-            return false;
-        }
-    }
-
     public boolean joinLobby(Lobby lobby){
         try
         {
             if(rmiClient.joinLobby(lobby))
             {
-                rmiClient.setActiveLobby(lobby);
+                rmiClient.setActiveLobby(lobby, rmiClient.getUser().getID());
                 return true;
             }
             return false;
@@ -79,16 +63,17 @@ public class Administration
 
     public boolean leaveLobby()
     {
+        return leaveLobby(rmiClient.getUser().getID());
+    }
+    public boolean leaveLobby(int leaverId)
+    {
         try{
             Lobby lobby = rmiClient.getActiveLobby();
 
             if(lobby != null)
             {
-                if(rmiClient.leaveLobby(lobby))
+                if(rmiClient.leaveLobby(lobby.getId(), leaverId))
                 {
-                    System.out.println("Setting to null->");
-                    rmiClient.setActiveLobby(null);
-                    System.out.println("Success(Admin)");
                     return true;
                 }
             }
@@ -109,7 +94,7 @@ public class Administration
             Lobby lobby = rmiClient.addLobby(name);
             if(lobby != null)
             {
-                rmiClient.setActiveLobby(lobby);
+                rmiClient.setActiveLobby(lobby, rmiClient.getUser().getID());
                 return true;
             }
             return false;
