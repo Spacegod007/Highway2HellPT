@@ -89,13 +89,13 @@ public class Main extends Application{
 
     private void setUpControls()
     {
-        btnHostLobby.setLayoutX(0);
+        btnHostLobby.setLayoutX(150);
         btnHostLobby.setLayoutY(0);
         btnHostLobby.setPrefWidth(150);
         btnHostLobby.setText("Host lobby");
         btnHostLobby.setOnAction(event -> hostLobby());
 
-        btnJoinLobby.setLayoutX(150);
+        btnJoinLobby.setLayoutX(300);
         btnJoinLobby.setLayoutY(0);
         btnJoinLobby.setPrefWidth(150);
         btnJoinLobby.setText("Join lobby");
@@ -133,7 +133,7 @@ public class Main extends Application{
         listvwPlayers.setLayoutX(300);
         listvwPlayers.setLayoutY(150);
 
-        text.setLayoutX(300);
+        text.setLayoutX(0);
         text.setLayoutY(0);
 
         timer.schedule(new TimerTask() {
@@ -164,13 +164,28 @@ public class Main extends Application{
     }
 
     private void hostLobby(){
-        try{
-            administration.hostLobby("testlobby");
-            listvwLobby.setItems(administration.refresh());
+        if(!administration.inLobby())
+        {
+            if((text.getText()).trim().length()>=4)
+            {
+                try
+                {
+                    administration.hostLobby(text.getText());
+                    listvwLobby.setItems(administration.refresh());
+                } catch (Exception e)
+                {
+                    e.printStackTrace();
+                }
+            }
+            else
+            {
+                System.out.println("Enter a name of at least 4 characters");
+            }
         }
-        catch(Exception e){
-            e.printStackTrace();
-        }
+        else
+            {
+                System.out.println("Please leave your current lobby before hosting a new one");
+            }
     }
 
     private void joinLobby()
