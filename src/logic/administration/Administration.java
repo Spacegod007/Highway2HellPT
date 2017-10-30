@@ -15,6 +15,15 @@ public class Administration
         this.user = rmiClient.getUser();
     }
 
+
+    public boolean inLobby()
+    {
+       if(rmiClient.getActiveLobby() != null)
+       {
+           return true;
+       }
+       return false;
+    }
     public User getUser() {
         return user;
     }
