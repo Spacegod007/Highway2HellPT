@@ -1,6 +1,6 @@
 package logic.administration;
 
-import RMItest.RMIClient;
+import logic.remote_method_invocation.RMIClient;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
@@ -41,7 +41,7 @@ public class Administration
             if(rmiClient.joinLobby(lobby))
             {
                 rmiClient.setActiveLobby(lobby);
-               return true;
+                return true;
             }
             return false;
         }

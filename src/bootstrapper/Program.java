@@ -1,13 +1,13 @@
 package bootstrapper;
 
-import RMItest.RMIClient;
+import logic.remote_method_invocation.RMIClient;
 import logic.administration.Administration;
 import sample.Main;
 
 import java.util.Properties;
 
 /**
- * Bootstrapper class to initiate the entire application
+ * Bootstrap class to initiate the entire application
  */
 public class Program
 {

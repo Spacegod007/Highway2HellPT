@@ -33,7 +33,7 @@ public class Main extends Application{
     private Button btnStartGame = new Button();
     private Button btnLeaveLobby = new Button();
     private ListView<Lobby> listvwLobby = new ListView<>();
-    private ListView<User> listvwPlayers = new ListView<User>();
+    private ListView<User> listvwPlayers = new ListView<>();
     private TextField text = new TextField();
     private Button btnRefresh = new Button();
     private Parent root; //niet converten naar local nog plz

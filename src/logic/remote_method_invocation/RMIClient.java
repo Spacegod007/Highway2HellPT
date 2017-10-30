@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package RMItest;
+package logic.remote_method_invocation;
 
 import logic.administration.Lobby;
 import logic.administration.User;
