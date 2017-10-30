@@ -6,6 +6,8 @@ import java.net.UnknownHostException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class RMIServer {
 
@@ -22,6 +24,7 @@ public class RMIServer {
     // Constructor
     public RMIServer() {
 
+
         // Print port number for registry
         System.out.println("Server: Port number " + portNumber);
 
@@ -34,6 +37,9 @@ public class RMIServer {
             System.out.println("Server: RemoteException: " + ex.getMessage());
             lobbyAdmin = null;
         }
+
+        //Start the timer to clean the list of lobbies
+        updateLobbies();
 
         // Create registry at port number
         try {
@@ -54,7 +60,25 @@ public class RMIServer {
         }
     }
 
-    // Print IP addresses and network interfaces
+    /**
+     * Start the timer to clean the list of lobbies
+     */
+    private void updateLobbies()
+    {
+        Timer timer = new Timer();
+        timer.scheduleAtFixedRate(new TimerTask()
+        {
+            @Override
+            public void run()
+            {
+                lobbyAdmin.cleanLobbies();
+            }
+        }, 0, 1000);
+    }
+
+    /** Print IP addresses and network interfaces
+     *
+     */
     private static void printIPAddresses() {
         try {
             InetAddress localhost = InetAddress.getLocalHost();
@@ -71,20 +95,6 @@ public class RMIServer {
             System.out.println("Server: Cannot get IP address of local host");
             System.out.println("Server: UnknownHostException: " + ex.getMessage());
         }
-
-//        try {
-//            System.out.println("Server: Full list of network interfaces:");
-//            for (Enumeration<NetworkInterface> en = NetworkInterface.getNetworkInterfaces(); en.hasMoreElements();) {
-//                NetworkInterface intf = en.nextElement();
-//                System.out.println("    " + intf.getName() + " " + intf.getDisplayName());
-//                for (Enumeration<InetAddress> enumIpAddr = intf.getInetAddresses(); enumIpAddr.hasMoreElements();) {
-//                    System.out.println("        " + enumIpAddr.nextElement().toString());
-//                }
-//            }
-//        } catch (SocketException ex) {
-//            System.out.println("Server: Cannot retrieve network interface list");
-//            System.out.println("Server: UnknownHostException: " + ex.getMessage());
-//        }
     }
 
     /**

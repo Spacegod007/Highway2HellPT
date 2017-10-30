@@ -83,6 +83,31 @@
             <set />
           </value>
         </entry>
+        <entry key="$PROJECT_DIR$/src/logic/remote_method_invocation/ILobbyAdmin.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/logic/remote_method_invocation/LobbyAdmin.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/logic/remote_method_invocation/RMIClient.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/logic/remote_method_invocation/RMIServer.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/logic/remote_method_invocation/threads/LobbyCleaner.java">
+          <value>
+            <set />
+          </value>
+        </entry>
         <entry key="$PROJECT_DIR$/src/sample/HostLobbyController.java">
           <value>
             <set />
