@@ -195,6 +195,10 @@ public class Main extends Application{
             Lobby lobby = listvwLobby.getSelectionModel().getSelectedItem();
             if(lobby != null)
             {
+                if(administration.inLobby())
+                {
+                    administration.leaveLobby();
+                }
                 int i = listvwLobby.getSelectionModel().getSelectedIndex();
                 if(administration.joinLobby(lobby))
                 {
