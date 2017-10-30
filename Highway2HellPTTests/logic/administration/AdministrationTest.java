@@ -1,9 +1,10 @@
 package logic.administration;
 
-import RMItest.RMIClient;
+import logic.remote_method_invocation.*;
 import org.junit.Test;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotSame;
 
 /**
  * Created by maxhe on 23-10-2017.
@@ -14,7 +15,7 @@ public class AdministrationTest {
 
     @Test
     public void getUserTest(){
-        User user = new User("Max");
+        User user = new User("Max", 0);
         administration.setUser(user);
         assertEquals(user,administration.getUser());
     }
@@ -27,14 +28,14 @@ public class AdministrationTest {
 
     @Test
     public void getUserNotEqualTest(){
-        User user = new User("Max");
-        administration.setUser(new User("Jan"));
+        User user = new User("Max", 0);
+        administration.setUser(new User("Jan", 1));
         assertNotSame(user,administration.getUser());
     }
 
     @Test
     public void setUserTest(){
-        User user = new User("Max");
+        User user = new User("Max", 0);
         administration.setUser(user);
         assertEquals(user,administration.getUser());
     }
@@ -48,8 +49,8 @@ public class AdministrationTest {
 
     @Test
     public void setUserNotEqualTest(){
-        User user = new User("Max");
-        administration.setUser(new User("Jan"));
+        User user = new User("Max", 0);
+        administration.setUser(new User("Jan", 0));
         assertNotSame(user,administration.getUser());
     }
 

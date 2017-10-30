@@ -28,6 +28,11 @@ public class Administration
         return user;
     }
 
+    public void setUser(User user)
+    {
+        this.user = user;
+    }
+
     public boolean kickPlayer(int l, int index) {
         try
         {
