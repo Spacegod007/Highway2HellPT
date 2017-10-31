@@ -78,7 +78,7 @@ public class Administration
                 }
             }
             else{
-                System.out.println("Lol lobby is null fucker");
+                System.out.println("Error: Lobby is null");
             }
         }
         catch(Exception e){
