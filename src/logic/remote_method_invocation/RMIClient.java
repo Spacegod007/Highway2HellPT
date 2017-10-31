@@ -193,8 +193,10 @@ public class RMIClient {
     public boolean leaveLobby(int lobby, int id)
     {
         try{
-            lobbyAdmin.leaveLobby(lobby, id, this.user.getID());
-            setActiveLobby(null, id);
+            if(lobbyAdmin.leaveLobby(lobby, id, this.user.getID()))
+            {
+                setActiveLobby(null, id);
+            }
             return true;
         }
         catch(RemoteException ex){
