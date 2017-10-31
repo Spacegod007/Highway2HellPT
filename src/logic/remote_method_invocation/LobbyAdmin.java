@@ -65,7 +65,6 @@ public class LobbyAdmin extends UnicastRemoteObject implements ILobbyAdmin{
         {
             for (Lobby l : lobbys)
             {
-
                 if (l.getId() == lobbyId) //find matching lobby
                 {
                     if(userId == issuerId || issuerId == l.getHost().getID()) //if host or self-leave
