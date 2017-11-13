@@ -107,6 +107,7 @@ public class PlayerObject extends GameObject {
         double OOXWithWidth = OOX + OO.getWidth();
         double OOYWithHeight = OOY + OO.getHeight();
 
+        //Collision is not right yet. Need to check bottom right and top left corner of player as well.
         return POX >= OOX && POX <= OOXWithWidth && POY >= OOY && POY <= OOYWithHeight ||
                 POXWithWidth >= OOX && POXWithWidth <= OOXWithWidth && POYWithHeight >= OOY && POYWithHeight <= OOYWithHeight;
     }

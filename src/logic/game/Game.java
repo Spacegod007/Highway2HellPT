@@ -12,8 +12,10 @@ import java.util.Observer;
 public class Game implements Runnable, Observer {
     private List<GameObject> GameObjects;
     private List<Gamerule> gamerules;
-    private double scrollSpeed = 1;
-    private int obstacleCount = 2;
+    private double scrollSpeed = 1.5;
+
+    //Dit is lelijk, geef een lijst mee met obstacleobject ipv hardcoded.
+    private int obstacleCount = 8;
 
     public Game(List<Gamerule> gamerules) {
         this.gamerules = gamerules;
@@ -22,7 +24,7 @@ public class Game implements Runnable, Observer {
         GameObjects.add(new PlayerObject(new Point(860, 900),"Player2", Color.BLACK));
 
         for(int i=0; i<obstacleCount; i++){
-            GameObjects.add(new ObstacleObject(70, 48));
+            GameObjects.add(new ObstacleObject(140, 96));
             System.out.println("item " + i + " added");
         }
     }
@@ -49,7 +51,13 @@ public class Game implements Runnable, Observer {
         for(GameObject GO : getGameObjects())
         {
             //GO scroll.
-            GO.setAnchor(new Point(GO.getAnchor().getX(), GO.getAnchor().getY() + scrollSpeed));
+            if(GO.getClass() != ObstacleObject.class)
+            {
+                GO.setAnchor(new Point(GO.getAnchor().getX(), GO.getAnchor().getY() + scrollSpeed));
+            }
+            else{
+                GO.setAnchor(new Point(GO.getAnchor().getX(), GO.getAnchor().getY() + scrollSpeed * 3));
+            }
 
             //Check if GO is dead.
             //Game window: 1200x1000
@@ -79,7 +87,6 @@ public class Game implements Runnable, Observer {
                 for (GameObject GO2: GameObjects) {
                     if(GO2.getClass() == ObstacleObject.class && PO.checkForObstacleCollision((ObstacleObject) GO2)) {
                         PO.setIsDead(true);
-                        System.out.println("RIP");
                     }
                 }
             }
@@ -89,7 +96,7 @@ public class Game implements Runnable, Observer {
                 ObstacleObject OO = (ObstacleObject) GO;
                 if(OO.getAnchor().getY() + (OO.getHeight()) > 1000)
                 {
-                    GameObjects.set(index, new ObstacleObject(70, 48));
+                    GameObjects.set(index, new ObstacleObject(140, 96));
                     System.out.println("Obstacle respawned");
                 }
             }

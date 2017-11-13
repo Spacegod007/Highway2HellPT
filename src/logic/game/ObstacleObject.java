@@ -7,7 +7,7 @@ public class ObstacleObject extends GameObject {
     private int height;
 
     public ObstacleObject(int width, int height) {
-        super(new Point(ThreadLocalRandom.current().nextInt(0, 1900 + 1), ThreadLocalRandom.current().nextInt(-500, 1)));
+        super(new Point(ThreadLocalRandom.current().nextInt(0, 1800 + 1), ThreadLocalRandom.current().nextInt(-1500, 1)));
         this.width = width;
         this.height = height;
     }

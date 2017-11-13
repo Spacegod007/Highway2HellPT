@@ -38,6 +38,12 @@ public class Main extends Application {
         playerImageView.add(addPlayerImageView());
         obstacleImageView.add(addObstacleImageView());
         obstacleImageView.add(addObstacleImageView());
+        obstacleImageView.add(addObstacleImageView());
+        obstacleImageView.add(addObstacleImageView());
+        obstacleImageView.add(addObstacleImageView());
+        obstacleImageView.add(addObstacleImageView());
+        obstacleImageView.add(addObstacleImageView());
+        obstacleImageView.add(addObstacleImageView());
 
         for(ImageView player : playerImageView)
         {
@@ -116,8 +122,14 @@ public class Main extends Application {
         //Initialize first frame
         PO1 = game.moveCharacter("Player1", Direction.RIGHT);
         PO2 = game.moveCharacter("Player2", Direction.D);
-        obstacleObjects.add(new ObstacleObject(70, 48));
-        obstacleObjects.add(new ObstacleObject(70, 48));
+        obstacleObjects.add(new ObstacleObject(140, 96));
+        obstacleObjects.add(new ObstacleObject(140, 96));
+        obstacleObjects.add(new ObstacleObject(140, 96));
+        obstacleObjects.add(new ObstacleObject(140, 96));
+        obstacleObjects.add(new ObstacleObject(140, 96));
+        obstacleObjects.add(new ObstacleObject(140, 96));
+        obstacleObjects.add(new ObstacleObject(140, 96));
+        obstacleObjects.add(new ObstacleObject(140, 96));
 
         //Initiate timer for map scroll.
         AnimationTimer aTimer = new AnimationTimer() {
@@ -129,16 +141,11 @@ public class Main extends Application {
                 playerImageView.get(0).setX(PO1.getAnchor().getX());
                 playerImageView.get(0).setY(PO1.getAnchor().getY());
 
-                for (GameObject GO : game.getGameObjects()) {
-                    System.out.println(GO.getAnchor().getY());
-                }
-
                 obstacleObjects = game.returnObstacleObjects();
 
                 for (int i = 0; i < obstacleObjects.size(); i++) {
                     obstacleImageView.get(i).setX(obstacleObjects.get(i).getAnchor().getX());
                     obstacleImageView.get(i).setY(obstacleObjects.get(i).getAnchor().getY());
-                    System.out.println(obstacleObjects.get(i).getAnchor().getY());
                 }
             }
         };
@@ -161,8 +168,8 @@ public class Main extends Application {
     private ImageView addObstacleImageView() {
         ImageView imageView = new ImageView();
         imageView.setImage(obstacleImage);
-        imageView.setFitWidth(70);
-        imageView.setFitHeight(48);
+        imageView.setFitWidth(140);
+        imageView.setFitHeight(96);
         imageView.setPreserveRatio(true);
         imageView.setSmooth(true);
         imageView.setCache(true);
