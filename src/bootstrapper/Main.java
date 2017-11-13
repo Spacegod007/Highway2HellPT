@@ -2,10 +2,14 @@ package bootstrapper;
 
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Group;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import logic.game.*;
@@ -19,11 +23,10 @@ public class Main extends Application {
     private PlayerObject PO2 = new PlayerObject(new Point(860, 900),"Player2", Color.BLACK);
     private ArrayList<ObstacleObject> obstacleObjects = new ArrayList<>();
     private Image playerImage = new Image("characters/character_black_blue.png");
+    private Image playerImage2 = new Image("characters/character_blonde_red.png");
     private Image obstacleImage = new Image("objects/barrel_red_down.png");
     private ArrayList<ImageView> playerImageView = new ArrayList<>();
     private ArrayList<ImageView> obstacleImageView = new ArrayList<>();
-    private Group root = new Group();
-    private Scene scene = new Scene(root);
     private Game game = new Game(new ArrayList<>());
 
     //This is ugly because we have 4 buttons to press now.
@@ -34,8 +37,23 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception{
+
+        // background scroller
+        FXMLLoader fxmlLoader =
+                new FXMLLoader(getClass().getResource("/Background.fxml") );
+        Parent p = fxmlLoader.load();
+
+        BackgroundController c = fxmlLoader.getController();
+        Scene scene = new Scene(p);
+
+        primaryStage.setTitle( "Game" );
+        primaryStage.setOnShown( (evt) -> c.startAmination() );
+        Pane gamePane = (Pane) p.lookup("#gamePane");
+
+        // player movement
         playerImageView.add(addPlayerImageView());
         playerImageView.add(addPlayerImageView());
+        playerImageView.get(1).setImage(playerImage2);
         obstacleImageView.add(addObstacleImageView());
         obstacleImageView.add(addObstacleImageView());
         obstacleImageView.add(addObstacleImageView());
@@ -47,12 +65,12 @@ public class Main extends Application {
 
         for(ImageView player : playerImageView)
         {
-            root.getChildren().add(player);
+            gamePane.getChildren().add(player);
         }
 
         for(ImageView obstacle : obstacleImageView)
         {
-            root.getChildren().add(obstacle);
+            gamePane.getChildren().add(obstacle);
         }
 
         scene.setOnKeyReleased(event -> {
@@ -113,23 +131,21 @@ public class Main extends Application {
                     break;
             }
         });
-        primaryStage.setTitle("Game");
-        primaryStage.setWidth(1920);
-        primaryStage.setHeight(1080);
-        primaryStage.setMaximized(true);
+        primaryStage.setWidth(1200);
+        primaryStage.setHeight(1000);
         primaryStage.setScene(scene);
 
         //Initialize first frame
         PO1 = game.moveCharacter("Player1", Direction.RIGHT);
         PO2 = game.moveCharacter("Player2", Direction.D);
-        obstacleObjects.add(new ObstacleObject(140, 96));
-        obstacleObjects.add(new ObstacleObject(140, 96));
-        obstacleObjects.add(new ObstacleObject(140, 96));
-        obstacleObjects.add(new ObstacleObject(140, 96));
-        obstacleObjects.add(new ObstacleObject(140, 96));
-        obstacleObjects.add(new ObstacleObject(140, 96));
-        obstacleObjects.add(new ObstacleObject(140, 96));
-        obstacleObjects.add(new ObstacleObject(140, 96));
+        obstacleObjects.add(new ObstacleObject(70, 48));
+        obstacleObjects.add(new ObstacleObject(70, 48));
+        obstacleObjects.add(new ObstacleObject(70, 48));
+        obstacleObjects.add(new ObstacleObject(70, 48));
+        obstacleObjects.add(new ObstacleObject(70, 48));
+        obstacleObjects.add(new ObstacleObject(70, 48));
+        obstacleObjects.add(new ObstacleObject(70, 48));
+        obstacleObjects.add(new ObstacleObject(70, 48));
 
         //Initiate timer for map scroll.
         AnimationTimer aTimer = new AnimationTimer() {
@@ -140,6 +156,9 @@ public class Main extends Application {
                 playerImageView.get(1).setY(PO2.getAnchor().getY());
                 playerImageView.get(0).setX(PO1.getAnchor().getX());
                 playerImageView.get(0).setY(PO1.getAnchor().getY());
+
+                for (GameObject GO : game.getGameObjects()) {
+                }
 
                 obstacleObjects = game.returnObstacleObjects();
 
@@ -168,8 +187,8 @@ public class Main extends Application {
     private ImageView addObstacleImageView() {
         ImageView imageView = new ImageView();
         imageView.setImage(obstacleImage);
-        imageView.setFitWidth(140);
-        imageView.setFitHeight(96);
+        imageView.setFitWidth(70);
+        imageView.setFitHeight(48);
         imageView.setPreserveRatio(true);
         imageView.setSmooth(true);
         imageView.setCache(true);
