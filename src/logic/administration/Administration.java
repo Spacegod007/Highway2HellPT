@@ -1,18 +1,35 @@
 package logic.administration;
 
+import fontyspublisher.IRemotePropertyListener;
 import logic.remote_method_invocation.RMIClient;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import sample.Main;
 
-public class Administration
+import java.beans.PropertyChangeEvent;
+import java.rmi.Remote;
+import java.rmi.RemoteException;
+import java.rmi.server.UnicastRemoteObject;
+import java.util.List;
+
+public class Administration extends UnicastRemoteObject implements IRemotePropertyListener
 {
 
     private RMIClient rmiClient;
     private User user;
+    private Main main;
 
-    public Administration(RMIClient rmiClient){
+    public Administration(RMIClient rmiClient) throws RemoteException{
         this.rmiClient = rmiClient;
         this.user = rmiClient.getUser();
+        try
+        {
+            rmiClient.getRpl().subscribeRemoteListener(this, "lobbys");
+        }
+        catch(RemoteException ex)
+        {
+            ex.printStackTrace();
+        }
     }
 
 
@@ -47,17 +64,6 @@ public class Administration
         {
             e.printStackTrace();
             return false;
-        }
-    }
-
-    public ObservableList<Lobby> refresh()
-    {
-        try{
-            return FXCollections.observableList(rmiClient.getLobbies());
-        }
-        catch (Exception e){
-            e.printStackTrace();
-            return null;
         }
     }
 
@@ -106,6 +112,17 @@ public class Administration
     }
 
 
+    @Override
+    public void propertyChange(PropertyChangeEvent evt) throws RemoteException
+    {
+        main.setListvwLobby(FXCollections.observableList((List<Lobby>)evt.getNewValue()));
+        System.out.println("property changed: " + evt.getPropertyName());
+    }
+
+    public void setMain(Main main)
+    {
+        this.main = main;
 
 
+    }
 }

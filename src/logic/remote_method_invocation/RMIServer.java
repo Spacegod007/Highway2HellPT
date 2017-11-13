@@ -1,6 +1,8 @@
 
 package logic.remote_method_invocation;
 
+import fontyspublisher.RemotePublisher;
+
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.rmi.RemoteException;
@@ -16,10 +18,12 @@ public class RMIServer {
 
     // Set binding name for student administration
     private static final String bindingName = "LobbyAdmin";
+    private static final String bindingNamePublisher = "publisher";
 
     // References to registry and student administration
     private Registry registry = null;
     private LobbyAdmin lobbyAdmin = null;
+    private RemotePublisher publisher = null;
 
     // Constructor
     public RMIServer() {
@@ -30,7 +34,8 @@ public class RMIServer {
 
         // Create student administration
         try {
-            lobbyAdmin = new LobbyAdmin();
+            publisher = new RemotePublisher();
+            lobbyAdmin = new LobbyAdmin(publisher);
             System.out.println("Server: Lobby administration created");
         } catch (RemoteException ex) {
             System.out.println("Server: Cannot create lobby administration");
@@ -51,6 +56,12 @@ public class RMIServer {
             registry = null;
         }
 
+        try{
+            registry.rebind(bindingNamePublisher, publisher);
+        } catch(RemoteException ex){
+            System.out.println("Server: Cannot bind publisher");
+            System.out.println("Server: RemoteException: " + ex.getMessage());
+        }
         // Bind student administration using registry
         try {
             registry.rebind(bindingName, lobbyAdmin);

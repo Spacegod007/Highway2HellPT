@@ -4,6 +4,7 @@ import database.Contexts.LocalContext;
 import database.Repositories.Repository;
 import javafx.application.Application;
 import javafx.application.Platform;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -11,6 +12,7 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
@@ -35,8 +37,15 @@ public class Main extends Application{
     private ListView<User> listvwPlayers = new ListView<>();
     private TextField text = new TextField();
     private Button btnRefresh = new Button();
-    private Parent root; //niet converten naar local nog plz
-    Timer timer;
+    //private Parent root; //niet converten naar local nog plz
+    private TextField txtEnterName = new TextField();
+    private Button btnLaunchLobbyScreen = new Button();
+    private FlowPane lobbyScreen;
+    private FlowPane titleScreen;
+    private Scene titleScene;
+    private Scene lobbyScene;
+    private Stage stage;
+
 
     public static void launchView(String[] args, Administration admin)
     {
@@ -49,41 +58,36 @@ public class Main extends Application{
     public void start(Stage primaryStage) throws Exception{
         try
         {
+            stage = primaryStage;
+
             Repository repo = new Repository(new LocalContext());
             System.out.println("Connection to database: " + Boolean.toString(repo.testConnection()));
-            root = FXMLLoader.load(getClass().getResource("main.fxml"));
-            primaryStage.setTitle("Hello World");
-            Canvas canvas = new Canvas(600, 600);
-            ((GridPane)root).getChildren().add(canvas);
-            timer = new Timer();
+
+            //root = FXMLLoader.load(getClass().getResource("main.fxml"));
+            //deze dingen moeten zoals 'root' allebei uit een fxml komen
+
             setUpControls();
-            ((GridPane)root).getChildren().add(new Pane(btnHostLobby, btnJoinLobby, btnKickPlayer, btnStartGame, btnLeaveLobby, text, listvwLobby, listvwPlayers, btnRefresh));
-            primaryStage.setScene(new Scene(root, 600, 600));
+            titleScreen = new FlowPane();
+            lobbyScreen = new FlowPane();
+
+            titleScreen.getChildren().addAll(txtEnterName, btnLaunchLobbyScreen);
+            lobbyScreen.getChildren().addAll(btnHostLobby, btnJoinLobby, btnKickPlayer, btnStartGame, btnLeaveLobby, text, listvwLobby, listvwPlayers, btnRefresh);
+
+
+            titleScene = new Scene(titleScreen, 600, 600);
+            lobbyScene = new Scene(lobbyScreen, 600, 600);
+
+            primaryStage.setTitle("Hello World");
+            primaryStage.setScene(titleScene);
             primaryStage.show();
 
+            administration.setMain(this);
+
         }
-        catch(IOException e)
+        catch(Exception e /*IOException*/)
         {
             e.printStackTrace();
         }
-    }
-
-    private void refreshLobbies()
-    {
-        Lobby lobby = listvwLobby.getSelectionModel().getSelectedItem();
-        User player = listvwPlayers.getSelectionModel().getSelectedItem();
-        listvwLobby.setItems(administration.refresh());
-        if(lobby != null)
-        {
-           for(Lobby l : listvwLobby.getItems())
-           {
-                if(l.getId() == lobby.getId()){
-                    listvwLobby.getSelectionModel().select(l);
-                }
-            }
-        }
-        viewLobby(player);
-
     }
 
     private void setUpControls()
@@ -122,12 +126,10 @@ public class Main extends Application{
         btnRefresh.setLayoutY(50);
         btnRefresh.setText("Refresh");
         btnRefresh.setPrefWidth(100);
-        btnRefresh.setOnAction(event -> refreshLobbies());
 
         listvwLobby.setLayoutX(50);
         listvwLobby.setLayoutY(150);
         listvwLobby.getSelectionModel().selectedItemProperty().addListener(event -> viewLobby(null));
-        listvwLobby.setItems(administration.refresh());
 
         listvwPlayers.setLayoutX(300);
         listvwPlayers.setLayoutY(150);
@@ -135,15 +137,12 @@ public class Main extends Application{
         text.setLayoutX(0);
         text.setLayoutY(0);
 
-        timer.schedule(new TimerTask() {
-            public void run() {
-                Platform.runLater(() -> refresh());
-            }
-        }, 2000, 1000);
+        btnLaunchLobbyScreen.setOnAction(event -> launchLobbyScreen());
     }
 
-    private void refresh(){
-        refreshLobbies();
+    private void launchLobbyScreen()
+    {
+        stage.setScene(lobbyScene);
     }
 
     private void viewLobby(User player){
@@ -170,7 +169,6 @@ public class Main extends Application{
                 try
                 {
                     administration.hostLobby(text.getText());
-                    listvwLobby.setItems(administration.refresh());
                 } catch (Exception e)
                 {
                     e.printStackTrace();
@@ -198,13 +196,9 @@ public class Main extends Application{
                 {
                     administration.leaveLobby();
                 }
-                int i = listvwLobby.getSelectionModel().getSelectedIndex();
                 if(administration.joinLobby(lobby))
                 {
-                    //success join lobby
                     System.out.println("Successful join");
-                    listvwLobby.setItems(administration.refresh());
-                    listvwLobby.getSelectionModel().select(i);
                 }
                 else
                 {
@@ -265,5 +259,35 @@ public class Main extends Application{
     }
     private void startGame(){
         text.setText("Startgame");
+    }
+
+    public void setListvwLobby(ObservableList<Lobby> lobbys)
+    {
+        Lobby selectLobby = null;
+        if(listvwLobby.getSelectionModel().getSelectedItem() != null)
+        {
+            int selectedId = listvwLobby.getSelectionModel().getSelectedItem().getId();
+
+            for (Lobby lobby : lobbys)
+            {
+                if (lobby.getId() == selectedId)
+                {
+                    selectLobby = lobby;
+                    break;
+                }
+            }
+        }
+        Lobby finalSelectLobby = selectLobby;
+
+        Platform.runLater(() ->
+        {
+            listvwLobby.setItems(lobbys);
+            if(finalSelectLobby != null)
+            {
+                listvwLobby.getSelectionModel().select(finalSelectLobby);
+                listvwPlayers.setItems(finalSelectLobby.getPlayers());
+            }
+
+        });
     }
 }

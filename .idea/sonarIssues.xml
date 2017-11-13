@@ -158,6 +158,16 @@
             <set />
           </value>
         </entry>
+        <entry key="$PROJECT_DIR$/src/fontyspublisher/Publisher.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/fontyspublisher/RemotePublisher.java">
+          <value>
+            <set />
+          </value>
+        </entry>
         <entry key="$PROJECT_DIR$/src/logic/Gamerule.java">
           <value>
             <set />
@@ -219,6 +229,11 @@
           </value>
         </entry>
         <entry key="$PROJECT_DIR$/src/sample/Main.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/sample/TitleScreen.java">
           <value>
             <set />
           </value>

@@ -3,15 +3,22 @@ package logic.administration;
 import logic.remote_method_invocation.*;
 import org.junit.Test;
 
+import java.rmi.RemoteException;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotSame;
 
 /**
  * Created by maxhe on 23-10-2017.
  */
-public class AdministrationTest {
+public class AdministrationTest{
 
-    Administration administration = new Administration(new RMIClient("192.168.44.1",1100));
+
+    public AdministrationTest() throws RemoteException
+    {
+
+    }
+    Administration administration = new Administration(new RMIClient( "test", 1102));
 
     @Test
     public void getUserTest(){
@@ -63,7 +70,6 @@ public class AdministrationTest {
     public void joinLobbyTest(){
         administration.hostLobby("lobby");
         administration.hostLobby("lobby1");
-        administration.refresh();
         Lobby lobby = new Lobby("lobby",1);
         assertEquals(true,administration.joinLobby(lobby));
     }

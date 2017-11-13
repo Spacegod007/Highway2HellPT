@@ -4,6 +4,7 @@
  */
 package logic.remote_method_invocation;
 
+import fontyspublisher.IRemotePublisherForListener;
 import logic.administration.Lobby;
 import logic.administration.User;
 
@@ -24,7 +25,9 @@ public class RMIClient {
 
     // Set binding name for lobby administration
     private static final String bindingName = "LobbyAdmin";
+    private static final String bindingNamePublisher = "publisher";
     private User user;
+
     public User getUser()
     {
         return user;
@@ -33,6 +36,12 @@ public class RMIClient {
     // References to registry and lobby administration
     private Registry registry = null;
     private ILobbyAdmin lobbyAdmin = null;
+    private IRemotePublisherForListener rpl;
+
+    public IRemotePublisherForListener getRpl()
+    {
+        return rpl;
+    }
 
     public RMIClient(Properties properties)
     {
@@ -87,6 +96,21 @@ public class RMIClient {
                 System.out.println("Client: Cannot bind lobby administration");
                 System.out.println("Client: NotBoundException: " + ex.getMessage());
                 lobbyAdmin = null;
+            }
+        }
+
+        // Bind publisher using registry
+        if (registry != null) {
+            try {
+                rpl = (IRemotePublisherForListener) registry.lookup(bindingNamePublisher);
+            } catch (RemoteException ex) {
+                System.out.println("Client: Cannot bind lobby administration");
+                System.out.println("Client: RemoteException: " + ex.getMessage());
+                rpl = null;
+            } catch (NotBoundException ex) {
+                System.out.println("Client: Cannot bind lobby administration");
+                System.out.println("Client: NotBoundException: " + ex.getMessage());
+                rpl = null;
             }
         }
 

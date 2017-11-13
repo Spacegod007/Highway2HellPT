@@ -1,5 +1,7 @@
 package logic.remote_method_invocation;
 
+import fontyspublisher.IRemotePublisherForDomain;
+import fontyspublisher.RemotePublisher;
 import logic.administration.Lobby;
 import logic.administration.User;
 
@@ -11,6 +13,7 @@ import java.util.List;
 public class LobbyAdmin extends UnicastRemoteObject implements ILobbyAdmin{
     private ArrayList<Lobby> lobbys;
     private ArrayList<User> users;
+    private IRemotePublisherForDomain rpd;
     private static int nextID = 0;
     private static int nextUserID = 0;
 
@@ -28,7 +31,9 @@ public class LobbyAdmin extends UnicastRemoteObject implements ILobbyAdmin{
     }
 
     // Constructor
-    public LobbyAdmin() throws RemoteException {
+    public LobbyAdmin(IRemotePublisherForDomain rpd) throws RemoteException {
+        this.rpd = rpd;
+        rpd.registerProperty("lobbys");
         lobbys = new ArrayList<>();
         users = new ArrayList<>();
     }
@@ -56,6 +61,7 @@ public class LobbyAdmin extends UnicastRemoteObject implements ILobbyAdmin{
             joinLobby(lobby, user);
         }
         System.out.println("LobbyAdmin: Lobby " + lobby.toString() + " added to Lobby administration");
+        rpd.inform("lobbys", null, lobbys);
         return lobby;
     }
 
@@ -63,26 +69,34 @@ public class LobbyAdmin extends UnicastRemoteObject implements ILobbyAdmin{
     {
         synchronized (lobbySynchronizer)
         {
-            for (Lobby l : lobbys)
+            try
             {
-                if (l.getId() == lobbyId) //find matching lobby
+                for (Lobby l : lobbys)
                 {
-                    if(userId == issuerId || issuerId == l.getHost().getID()) //if host or self-leave
+                    if (l.getId() == lobbyId) //find matching lobby
                     {
-                        l.leave(userId);
-                        if (userId == l.getHost().getID()) //if the leaver is the host
+                        if (userId == issuerId || issuerId == l.getHost().getID()) //if host or self-leave
                         {
-                            if (l.getPlayers().size() > 0) //and there are players remaining
+                            l.leave(userId);
+                            if (userId == l.getHost().getID()) //if the leaver is the host
                             {
-                                l.setHost(l.getPlayers().get(0)); //migrate host
-                            } else
-                            {
-                                l.setHost(null); //else, set host to null, lobby will be removed by the next tick of the timer
+                                if (l.getPlayers().size() > 0) //and there are players remaining
+                                {
+                                    l.setHost(l.getPlayers().get(0)); //migrate host
+                                } else
+                                {
+                                    l.setHost(null); //else, set host to null, lobby will be removed by the next tick of the timer
+                                }
                             }
+                            rpd.inform("lobbys", null, lobbys);
+                            return true;
                         }
-                        return true;
                     }
                 }
+            }
+            catch(RemoteException ex)
+            {
+                ex.printStackTrace();
             }
         }
         return false;
@@ -101,6 +115,8 @@ public class LobbyAdmin extends UnicastRemoteObject implements ILobbyAdmin{
             {
                 if (l.getId() == lobby.getId())
                 {
+                    try{rpd.inform("lobbys", null, lobbys);}
+                    catch(RemoteException ex){ex.printStackTrace();}
                     return l.join(user);
                 }
             }
@@ -145,14 +161,25 @@ public class LobbyAdmin extends UnicastRemoteObject implements ILobbyAdmin{
     {
         synchronized (lobbySynchronizer)
         {
+            boolean changed = false;
             for (int i = 0; i < lobbys.size(); i++)
             {
                 if (lobbys.get(i).getPlayers().size() == 0)
                 {
+
                     lobbys.remove(i);
+                    changed = true;
                     i--;
                 }
             }
+            if(changed){
+                try
+                {
+                    rpd.inform("lobbys", null, lobbys);
+                }
+                catch(RemoteException ex){ex.printStackTrace();}
+            }
+
         }
     }
 
