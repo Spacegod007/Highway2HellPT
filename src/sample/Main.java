@@ -4,6 +4,8 @@ import database.Contexts.LocalContext;
 import database.Repositories.Repository;
 import javafx.application.Application;
 import javafx.application.Platform;
+import javafx.beans.InvalidationListener;
+import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -34,8 +36,9 @@ public class Main extends Application{
     private Scene lobbyScene;
         private TextField txtEnterName = new TextField();
         private Button btnLaunchlobbyScreen = new Button();
-    private FlowPane inlobbyScene;
-        private ListView<User> getListvwPlayersInLobby = new ListView<>();
+    private FlowPane inLobbyScreen;
+    private Scene inLobbyScene;
+        private ListView<User> listvwPlayersInLobby = new ListView<>();
     //endregion
     private static Administration administration;
     private final int minCharsName = 4;
@@ -58,14 +61,17 @@ public class Main extends Application{
             setUpControls();
             titleScreen = new FlowPane();
             lobbyScreen = new FlowPane();
+            inLobbyScreen = new FlowPane();
             //root = FXMLLoader.load(getClass().getResource("main.fxml"));
             //deze dingen moeten zoals 'root' allebei uit een fxml komen
 
             titleScreen.getChildren().addAll(txtEnterName, btnLaunchlobbyScreen);
-            lobbyScreen.getChildren().addAll(btnHostLobby, btnJoinLobby, btnKickPlayer, btnStartGame, btnLeaveLobby, text, listvwLobby, listvwPlayers, btnRefresh);
-            
+            lobbyScreen.getChildren().addAll(btnHostLobby, btnJoinLobby, btnStartGame, text, listvwLobby, listvwPlayers, btnRefresh);
+            inLobbyScreen.getChildren().addAll(btnLeaveLobby, btnKickPlayer, listvwPlayersInLobby);
+
             titleScene = new Scene(titleScreen, 700, 600);
             lobbyScene = new Scene(lobbyScreen, 700, 600);
+            inLobbyScene = new Scene(inLobbyScreen, 700, 600);
 
             primaryStage.setTitle("Highway to Hell");
             primaryStage.setScene(titleScene);
@@ -93,12 +99,6 @@ public class Main extends Application{
         btnJoinLobby.setPrefWidth(150);
         btnJoinLobby.setText("Join lobby");
         btnJoinLobby.setOnAction(event -> joinLobby());
-
-        btnLeaveLobby.setLayoutX(450);
-        btnLeaveLobby.setLayoutY(0);
-        btnLeaveLobby.setPrefWidth(150);
-        btnLeaveLobby.setText("Leave lobby");
-        btnLeaveLobby.setOnAction(event -> leaveLobby());
 
         btnKickPlayer.setLayoutX(0);
         btnKickPlayer.setLayoutY(550);
@@ -128,13 +128,40 @@ public class Main extends Application{
         text.setLayoutY(0);
         //endregion
         //region TitleScreen
-        btnLaunchlobbyScreen.setOnAction(event -> launchlobbyScreen());
+        btnLaunchlobbyScreen.setOnAction(event -> launchlobbyScreen(txtEnterName.getText()));
+        //endregion
+        //region InLobbyScreen
+        btnLeaveLobby.setLayoutX(450);
+        btnLeaveLobby.setLayoutY(0);
+        btnLeaveLobby.setPrefWidth(150);
+        btnLeaveLobby.setText("Leave lobby");
+        btnLeaveLobby.setOnAction(event -> leaveLobby());
         //endregion
     }
 
-    private void launchlobbyScreen()
+    private boolean contains()
     {
-        String username = txtEnterName.getText();
+        for(User u : listvwPlayersInLobby.getItems())
+        {
+            if (u.getID() == administration.getUser().getID())
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+    private void checkForKicked()
+    {
+        if(stage.getScene() == inLobbyScene && !contains())
+        {
+            stage.setScene(lobbyScene);
+            System.out.println("left like this");
+        }
+
+    }
+
+    private void launchlobbyScreen(String username)
+    {
         if(validUsername(username))
         {
             administration.setUsername(username);
@@ -179,7 +206,7 @@ public class Main extends Application{
             {
                 listvwLobby.getSelectionModel().select(administration.hostLobby(text.getText()));
                 text.clear();
-
+                stage.setScene(inLobbyScene);
             }
             else
             {
@@ -205,7 +232,7 @@ public class Main extends Application{
                 }
                 if(administration.joinLobby(lobby))
                 {
-                    System.out.println("Successful join");
+                    stage.setScene(inLobbyScene);
                 }
                 else
                 {
@@ -292,6 +319,8 @@ public class Main extends Application{
             {
                 listvwLobby.getSelectionModel().select(finalSelectLobby);
                 listvwPlayers.setItems(finalSelectLobby.getPlayers());
+                listvwPlayersInLobby.setItems(finalSelectLobby.getPlayers());
+                checkForKicked();
             }
         });
     }
