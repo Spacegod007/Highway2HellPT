@@ -6,11 +6,13 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Group;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import logic.game.*;
 
@@ -28,6 +30,8 @@ public class Main extends Application {
     private ArrayList<ImageView> playerImageView = new ArrayList<>();
     private ArrayList<ImageView> obstacleImageView = new ArrayList<>();
     private Game game = new Game(new ArrayList<>());
+    private Label distanceLabel = new Label("0");
+    private ArrayList<Label> playerLabels = new ArrayList<>();
 
     //This is ugly because we have 4 buttons to press now.
     private boolean leftPressed = false;
@@ -54,6 +58,11 @@ public class Main extends Application {
         playerImageView.add(addPlayerImageView());
         playerImageView.add(addPlayerImageView());
         playerImageView.get(1).setImage(playerImage2);
+
+        for (Label playerlabel : getPlayerLabels()) {
+            gamePane.getChildren().add(playerlabel);
+        }
+
         obstacleImageView.add(addObstacleImageView());
         obstacleImageView.add(addObstacleImageView());
         obstacleImageView.add(addObstacleImageView());
@@ -66,6 +75,7 @@ public class Main extends Application {
         for(ImageView player : playerImageView)
         {
             gamePane.getChildren().add(player);
+            //gamePane.getChildren().add(new Label(PO1.getName()));
         }
 
         for(ImageView obstacle : obstacleImageView)
@@ -147,6 +157,11 @@ public class Main extends Application {
         obstacleObjects.add(new ObstacleObject(70, 48));
         obstacleObjects.add(new ObstacleObject(70, 48));
 
+        distanceLabel.setFont(new Font("Calibri", 22));
+        distanceLabel.setTranslateX(6);
+        distanceLabel.setTranslateY(3);
+        gamePane.getChildren().add(distanceLabel);
+
         //Initiate timer for map scroll.
         AnimationTimer aTimer = new AnimationTimer() {
             @Override
@@ -166,6 +181,25 @@ public class Main extends Application {
                     obstacleImageView.get(i).setX(obstacleObjects.get(i).getAnchor().getX());
                     obstacleImageView.get(i).setY(obstacleObjects.get(i).getAnchor().getY());
                 }
+                distanceLabel.setText("Distance: " + Long.toString(PO1.getDistance()));
+
+                int index = 0;
+                for (PlayerObject player : game.returnPlayerObjects()) {
+                    Label tempPlayerLabel = new Label(player.getName());
+                    tempPlayerLabel.setTranslateX(player.getAnchor().getX());
+                    tempPlayerLabel.setTranslateY(player.getAnchor().getY());
+                    playerLabels.set(index, tempPlayerLabel);
+                    index++;
+                }
+                /*for (PlayerObject player : game.returnPlayerObjects()) {
+                    Label tempPlayerLabel = new Label(player.getName());
+                    tempPlayerLabel.setFont(new Font("Calibri", 22));
+                    tempPlayerLabel.setTranslateX(player.getAnchor().getX());
+                    tempPlayerLabel.setTranslateY(player.getAnchor().getY());
+                    playerLabels.add(index, tempPlayerLabel);
+                    index++;
+                }
+                return playerLabels;*/
             }
         };
         aTimer.start();
@@ -200,5 +234,18 @@ public class Main extends Application {
         //System.out.println(Boolean.toString(repo.testConnection()));
         launch(args);
         //repo.closeConnection();
+    }
+
+    private ArrayList<Label> getPlayerLabels() {
+        int index = 0;
+        for (PlayerObject player : game.returnPlayerObjects()) {
+            Label tempPlayerLabel = new Label(player.getName());
+            tempPlayerLabel.setFont(new Font("Calibri", 22));
+            tempPlayerLabel.setTranslateX(player.getAnchor().getX());
+            tempPlayerLabel.setTranslateY(player.getAnchor().getY());
+            playerLabels.add(index, tempPlayerLabel);
+            index++;
+        }
+        return playerLabels;
     }
 }
