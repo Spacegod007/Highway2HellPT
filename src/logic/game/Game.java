@@ -1,6 +1,8 @@
 package logic.game;
 
+import javafx.scene.Scene;
 import javafx.scene.paint.Color;
+import javafx.stage.Stage;
 import logic.Gamerule;
 
 import java.lang.reflect.Array;
@@ -18,8 +20,10 @@ public class Game implements Runnable, Observer {
     public Game(List<Gamerule> gamerules) {
         this.gamerules = gamerules;
         GameObjects = new ArrayList<>();
+
+        //Add players here
         GameObjects.add(new PlayerObject(new Point(600, 900),"Player1", Color.BLACK));
-        GameObjects.add(new PlayerObject(new Point(540, 900),"Player2", Color.BLACK));
+        //GameObjects.add(new PlayerObject(new Point(540, 900),"Player2", Color.BLACK));
 
         for(int i=0; i<obstacleCount; i++){
             GameObjects.add(new ObstacleObject(70, 48));
@@ -65,19 +69,10 @@ public class Game implements Runnable, Observer {
                 //Setting the borders of the map for player death.
                 //Might need some tweaking, leave to the tester.
                 PlayerObject PO = (PlayerObject)GO;
-                if(PO.getAnchor().getX() + PO.getPlayerSize()[1] < 0)
-                {
-                    PO.setIsDead(true);
-                }
-                else if(PO.getAnchor().getX() > 1200)
-                {
-                    PO.setIsDead(true);
-                }
-                else if(PO.getAnchor().getY() + (PO.getPlayerSize()[1]/2) > 1000)
-                {
-                    PO.setIsDead(true);
-                }
-                else if(PO.getAnchor().getY() + (PO.getPlayerSize()[1]/2) < 0)
+                Point anchor = PO.getAnchor();
+                double[] size = PO.getPlayerSize();
+
+                if(anchor.getX() + size[1] < 0 || anchor.getX() > 1200 || anchor.getY() + (size[1]/2) > 1000 || anchor.getY() + (size[1]/2) < 0)
                 {
                     PO.setIsDead(true);
                 }
@@ -85,7 +80,7 @@ public class Game implements Runnable, Observer {
                 for (GameObject GO2: GameObjects) {
                     if(GO2.getClass() == ObstacleObject.class && PO.checkForObstacleCollision((ObstacleObject) GO2)) {
                         PO.setIsDead(true);
-                        System.out.println("RIP");
+                        //System.out.println("RIP");
                     }
                 }
             }
@@ -105,8 +100,17 @@ public class Game implements Runnable, Observer {
     public void convertAccountsToPlayerObjects(){
         throw new UnsupportedOperationException();
     }
-    public void endGame(){
-        throw new UnsupportedOperationException();
+    public void endGame(Scene newScene, Stage stage)
+    {
+        for(GameObject GO : getGameObjects())
+        {
+            if(GO.getClass() == PlayerObject.class)
+            {
+                stage.setScene(newScene);
+                PlayerObject PO = (PlayerObject)GO;
+                System.out.println("Player: " + PO.getName() + " = " + PO.getDistance() + " Points");
+            }
+        }
     }
 
     @Override
@@ -130,18 +134,6 @@ public class Game implements Runnable, Observer {
                             p.move(Direction.LEFT);
                             break;
                         case RIGHT:
-                            p.move(Direction.RIGHT);
-                            break;
-                    }
-                    return p;
-                }
-                if (playerName == "Player2" && p.getName() == "Player2")
-                {
-                    switch (direction) {
-                        case A:
-                            p.move(Direction.LEFT);
-                            break;
-                        case D:
                             p.move(Direction.RIGHT);
                             break;
                     }

@@ -7,7 +7,7 @@ public class PlayerObject extends GameObject {
     private String name;
     private Color color;
     private long distance;
-    private boolean isDead;
+    private boolean isDead = false;
     private double currentRotation;
     private double[] playerSize;
 
@@ -15,7 +15,7 @@ public class PlayerObject extends GameObject {
         super(anchor);
         this.name = name;
         this.color = color;
-        this.playerSize = new double[]{52, 36};
+        this.playerSize = new double[]{78, 54};
     }
 
     public long getDistance() {
@@ -107,6 +107,7 @@ public class PlayerObject extends GameObject {
         double OOXWithWidth = OOX + OO.getWidth();
         double OOYWithHeight = OOY + OO.getHeight();
 
+        //Collision is not right yet. Need to check bottom right and top left corner of player as well.
         return POX >= OOX && POX <= OOXWithWidth && POY >= OOY && POY <= OOYWithHeight ||
                 POXWithWidth >= OOX && POXWithWidth <= OOXWithWidth && POYWithHeight >= OOY && POYWithHeight <= OOYWithHeight;
     }
