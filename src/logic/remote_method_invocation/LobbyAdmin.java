@@ -11,13 +11,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class LobbyAdmin extends UnicastRemoteObject implements ILobbyAdmin{
-    private ArrayList<Lobby> lobbys;
+    private ArrayList<Lobby> lobbies;
     private ArrayList<User> users;
     private IRemotePublisherForDomain rpd;
     private static int nextID = 0;
     private static int nextUserID = 0;
 
-    private final Object lobbySynchronizer = new Object();
+    private final Object lobbiesynchronizer = new Object();
 
     static int getNextID(){
         int i = nextID;
@@ -33,20 +33,20 @@ public class LobbyAdmin extends UnicastRemoteObject implements ILobbyAdmin{
     // Constructor
     public LobbyAdmin(IRemotePublisherForDomain rpd) throws RemoteException {
         this.rpd = rpd;
-        rpd.registerProperty("lobbys");
-        lobbys = new ArrayList<>();
+        rpd.registerProperty("lobbies");
+        lobbies = new ArrayList<>();
         users = new ArrayList<>();
     }
 
     public int getNumberOfLobbies() throws RemoteException {
         System.out.println("LobbyAdmin: Request for number of Lobbies");
-        return lobbys.size();
+        return lobbies.size();
     }
 
     public Lobby getLobby(int nr) throws RemoteException {
         System.out.println("LobbyAdmin: Request for Lobby with number " + nr);
-        if (nr >= 0 && nr < lobbys.size()) {
-            return lobbys.get(nr);
+        if (nr >= 0 && nr < lobbies.size()) {
+            return lobbies.get(nr);
         }
         else {
             return null;
@@ -55,23 +55,23 @@ public class LobbyAdmin extends UnicastRemoteObject implements ILobbyAdmin{
 
     public Lobby addLobby(String name, User user, String ipAddress) throws RemoteException {
         Lobby lobby = new Lobby(name, getNextID(), ipAddress);
-        synchronized (lobbySynchronizer)
+        synchronized (lobbiesynchronizer)
         {
-            lobbys.add(lobby);
+            lobbies.add(lobby);
             joinLobby(lobby, user);
         }
         System.out.println("LobbyAdmin: Lobby " + lobby.toString() + " added to Lobby administration");
-        rpd.inform("lobbys", null, lobbys);
+        rpd.inform("lobbies", null, lobbies);
         return lobby;
     }
 
     public boolean leaveLobby(int lobbyId, int userId, int issuerId)
     {
-        synchronized (lobbySynchronizer)
+        synchronized (lobbiesynchronizer)
         {
             try
             {
-                for (Lobby l : lobbys)
+                for (Lobby l : lobbies)
                 {
                     if (l.getId() == lobbyId) //find matching lobby
                     {
@@ -88,7 +88,7 @@ public class LobbyAdmin extends UnicastRemoteObject implements ILobbyAdmin{
                                     l.setHost(null); //else, set host to null, lobby will be removed by the next tick of the timer
                                 }
                             }
-                            rpd.inform("lobbys", null, lobbys);
+                            rpd.inform("lobbies", null, lobbies);
                             return true;
                         }
                     }
@@ -104,18 +104,18 @@ public class LobbyAdmin extends UnicastRemoteObject implements ILobbyAdmin{
 
     public List<Lobby> getLobbies() throws RemoteException
     {
-        return lobbys;
+        return lobbies;
     }
 
     public boolean joinLobby(Lobby lobby, User user)
     {
-        synchronized (lobbySynchronizer)
+        synchronized (lobbiesynchronizer)
         {
-            for (Lobby l : lobbys)
+            for (Lobby l : lobbies)
             {
                 if (l.getId() == lobby.getId())
                 {
-                    try{rpd.inform("lobbys", null, lobbys);}
+                    try{rpd.inform("lobbies", null, lobbies);}
                     catch(RemoteException ex){ex.printStackTrace();}
                     return l.join(user);
                 }
@@ -128,7 +128,7 @@ public class LobbyAdmin extends UnicastRemoteObject implements ILobbyAdmin{
     {
         if(lobby != null)
         {
-            for(Lobby l : lobbys){
+            for(Lobby l : lobbies){
                 if(l.getId() == lobby.getId())
                 {  for(User u : users){
                     if(u.getID() == userId)
@@ -159,15 +159,15 @@ public class LobbyAdmin extends UnicastRemoteObject implements ILobbyAdmin{
 
     public void cleanLobbies()
     {
-        synchronized (lobbySynchronizer)
+        synchronized (lobbiesynchronizer)
         {
             boolean changed = false;
-            for (int i = 0; i < lobbys.size(); i++)
+            for (int i = 0; i < lobbies.size(); i++)
             {
-                if (lobbys.get(i).getPlayers().size() == 0)
+                if (lobbies.get(i).getPlayers().size() == 0)
                 {
 
-                    lobbys.remove(i);
+                    lobbies.remove(i);
                     changed = true;
                     i--;
                 }
@@ -175,7 +175,7 @@ public class LobbyAdmin extends UnicastRemoteObject implements ILobbyAdmin{
             if(changed){
                 try
                 {
-                    rpd.inform("lobbys", null, lobbys);
+                    rpd.inform("lobbies", null, lobbies);
                 }
                 catch(RemoteException ex){ex.printStackTrace();}
             }

@@ -5,84 +5,71 @@ import database.Repositories.Repository;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.collections.ObservableList;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.canvas.Canvas;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.FlowPane;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import logic.administration.Administration;
 import logic.administration.Lobby;
 import logic.administration.User;
 
-import java.io.IOException;
-import java.rmi.RemoteException;
-import java.util.Scanner;
-import java.util.Timer;
-import java.util.TimerTask;
-
 public class Main extends Application{
-
-    private static Administration administration;
-    private Button btnHostLobby = new Button();
-    private Button btnJoinLobby = new Button();
-    private Button btnKickPlayer = new Button();
-    private Button btnStartGame = new Button();
-    private Button btnLeaveLobby = new Button();
-    private ListView<Lobby> listvwLobby = new ListView<>();
-    private ListView<User> listvwPlayers = new ListView<>();
-    private TextField text = new TextField();
-    private Button btnRefresh = new Button();
-    //private Parent root; //niet converten naar local nog plz
-    private TextField txtEnterName = new TextField();
-    private Button btnLaunchLobbyScreen = new Button();
-    private FlowPane lobbyScreen;
+    
+    //region Form controls
+    private Stage stage;
     private FlowPane titleScreen;
     private Scene titleScene;
-    private Scene lobbyScene;
-    private Stage stage;
-    private int minCharsName = 4;
-
-
+        private ListView<Lobby> listvwLobby = new ListView<>();
+        private ListView<User> listvwPlayers = new ListView<>();
+        private TextField text = new TextField();
+        private Button btnRefresh = new Button();
+        private Button btnHostLobby = new Button();
+        private Button btnJoinLobby = new Button();
+        private Button btnKickPlayer = new Button();
+        private Button btnStartGame = new Button();
+        private Button btnLeaveLobby = new Button();
+    private FlowPane lobbiescreen;
+    private Scene lobbiescene;
+        private TextField txtEnterName = new TextField();
+        private Button btnLaunchlobbiescreen = new Button();
+    private FlowPane inlobbiescene;
+        private ListView<User> getListvwPlayersInLobby = new ListView<>();
+    //endregion
+    private static Administration administration;
+    private final int minCharsName = 4;
+    private final int minCharsLobbyName = 4;
+    
     public static void launchView(String[] args, Administration admin)
     {
         administration = admin;
         System.out.println("launching");
         launch(args);
     }
-
+    
     @Override
     public void start(Stage primaryStage) throws Exception{
         try
         {
-            stage = primaryStage;
-
             Repository repo = new Repository(new LocalContext());
             System.out.println("Connection to database: " + Boolean.toString(repo.testConnection()));
-
+            stage = primaryStage;
+            setUpControls();
+            titleScreen = new FlowPane();
+            lobbiescreen = new FlowPane();
             //root = FXMLLoader.load(getClass().getResource("main.fxml"));
             //deze dingen moeten zoals 'root' allebei uit een fxml komen
 
-            setUpControls();
-            titleScreen = new FlowPane();
-            lobbyScreen = new FlowPane();
-
-            titleScreen.getChildren().addAll(txtEnterName, btnLaunchLobbyScreen);
-            lobbyScreen.getChildren().addAll(btnHostLobby, btnJoinLobby, btnKickPlayer, btnStartGame, btnLeaveLobby, text, listvwLobby, listvwPlayers, btnRefresh);
-
-
+            titleScreen.getChildren().addAll(txtEnterName, btnLaunchlobbiescreen);
+            lobbiescreen.getChildren().addAll(btnHostLobby, btnJoinLobby, btnKickPlayer, btnStartGame, btnLeaveLobby, text, listvwLobby, listvwPlayers, btnRefresh);
+            
             titleScene = new Scene(titleScreen, 700, 600);
-            lobbyScene = new Scene(lobbyScreen, 700, 600);
+            lobbiescene = new Scene(lobbiescreen, 700, 600);
 
             primaryStage.setTitle("Highway to Hell");
             primaryStage.setScene(titleScene);
             primaryStage.show();
-
             administration.setMain(this);
 
         }
@@ -94,6 +81,7 @@ public class Main extends Application{
 
     private void setUpControls()
     {
+        //region lobbiescreen
         btnHostLobby.setLayoutX(150);
         btnHostLobby.setLayoutY(0);
         btnHostLobby.setPrefWidth(150);
@@ -138,24 +126,25 @@ public class Main extends Application{
 
         text.setLayoutX(0);
         text.setLayoutY(0);
-
-        btnLaunchLobbyScreen.setOnAction(event -> launchLobbyScreen());
+        //endregion
+        //region TitleScreen
+        btnLaunchlobbiescreen.setOnAction(event -> launchlobbiescreen());
+        //endregion
     }
 
-    private void launchLobbyScreen()
+    private void launchlobbiescreen()
     {
         String username = txtEnterName.getText();
         if(validUsername(username))
         {
             administration.setUsername(username);
             stage.setTitle("Highway to Hell: " + username );
-            stage.setScene(lobbyScene);
+            stage.setScene(lobbiescene);
         }
     }
 
     private boolean validUsername(String username)
     {
-        System.out.println(username);
         if((username).trim().length()>=minCharsName)
         {
             return true;
@@ -186,7 +175,7 @@ public class Main extends Application{
     private void hostLobby(){
         if(!administration.inLobby())
         {
-            if((text.getText()).trim().length()>=4)
+            if((text.getText()).trim().length()>=minCharsLobbyName)
             {
                 listvwLobby.getSelectionModel().select(administration.hostLobby(text.getText()));
                 text.clear();
@@ -279,14 +268,14 @@ public class Main extends Application{
         text.setText("Startgame");
     }
 
-    public void setListvwLobby(ObservableList<Lobby> lobbys)
+    public void setListvwLobby(ObservableList<Lobby> lobbies)
     {
         Lobby selectLobby = null;
         if(listvwLobby.getSelectionModel().getSelectedItem() != null)
         {
             int selectedId = listvwLobby.getSelectionModel().getSelectedItem().getId();
 
-            for (Lobby lobby : lobbys)
+            for (Lobby lobby : lobbies)
             {
                 if (lobby.getId() == selectedId)
                 {
@@ -296,16 +285,14 @@ public class Main extends Application{
             }
         }
         Lobby finalSelectLobby = selectLobby;
-
         Platform.runLater(() ->
         {
-            listvwLobby.setItems(lobbys);
+            listvwLobby.setItems(lobbies);
             if(finalSelectLobby != null)
             {
                 listvwLobby.getSelectionModel().select(finalSelectLobby);
                 listvwPlayers.setItems(finalSelectLobby.getPlayers());
             }
-
         });
     }
 }

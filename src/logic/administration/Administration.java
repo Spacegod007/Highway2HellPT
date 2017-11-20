@@ -24,7 +24,7 @@ public class Administration extends UnicastRemoteObject implements IRemoteProper
         this.user = rmiClient.getUser();
         try
         {
-            rmiClient.getRpl().subscribeRemoteListener(this, "lobbys");
+            rmiClient.getRpl().subscribeRemoteListener(this, "lobbies");
         }
         catch(RemoteException ex)
         {
