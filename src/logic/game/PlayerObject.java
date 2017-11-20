@@ -15,7 +15,7 @@ public class PlayerObject extends GameObject {
         super(anchor);
         this.name = name;
         this.color = color;
-        this.playerSize = new double[]{52, 36};
+        this.playerSize = new double[]{78, 54};
     }
 
     public long getDistance() {

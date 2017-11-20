@@ -177,8 +177,8 @@ public class Main extends Application {
     private ImageView addPlayerImageView() {
         ImageView imageView = new ImageView();
         imageView.setImage(playerImage);
-        imageView.setFitWidth(80);
-        imageView.setFitHeight(80);
+        imageView.setFitWidth(78);
+        imageView.setFitHeight(54);
         imageView.setPreserveRatio(true);
         imageView.setSmooth(true);
         imageView.setCache(true);
