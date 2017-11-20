@@ -7,7 +7,7 @@ public class PlayerObject extends GameObject {
     private String name;
     private Color color;
     private long distance;
-    private boolean isDead;
+    private boolean isDead = false;
     private double currentRotation;
     private double[] playerSize;
 

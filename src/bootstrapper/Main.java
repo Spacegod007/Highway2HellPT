@@ -20,20 +20,25 @@ import java.util.ArrayList;
 public class Main extends Application {
 
     private PlayerObject PO1 = new PlayerObject(new Point(960, 900),"Player1", Color.BLACK);
-    private PlayerObject PO2 = new PlayerObject(new Point(860, 900),"Player2", Color.BLACK);
+    //private PlayerObject PO2 = new PlayerObject(new Point(860, 900),"Player2", Color.BLACK);
     private ArrayList<ObstacleObject> obstacleObjects = new ArrayList<>();
+
+    //Playerimages for creating characters for later versions that use sockets.
     private Image playerImage = new Image("characters/character_black_blue.png");
     private Image playerImage2 = new Image("characters/character_blonde_red.png");
+
     private Image obstacleImage = new Image("objects/barrel_red_down.png");
     private ArrayList<ImageView> playerImageView = new ArrayList<>();
     private ArrayList<ImageView> obstacleImageView = new ArrayList<>();
     private Game game = new Game(new ArrayList<>());
+    private Scene scoreboardScene;
 
-    //This is ugly because we have 4 buttons to press now.
+    //Failsafe for if someone decides to hold in one of the buttons.
     private boolean leftPressed = false;
     private boolean rightPressed = false;
-    private boolean aPressed = false;
-    private boolean dPressed = false;
+
+    private int playersDead = 0;
+    private int players = 0;
 
     @Override
     public void start(Stage primaryStage) throws Exception{
@@ -42,9 +47,11 @@ public class Main extends Application {
         FXMLLoader fxmlLoader =
                 new FXMLLoader(getClass().getResource("/Background.fxml") );
         Parent p = fxmlLoader.load();
-
         BackgroundController c = fxmlLoader.getController();
         Scene scene = new Scene(p);
+
+        Parent root = FXMLLoader.load(getClass().getResource("/views/Scoreboard.fxml"));
+        scoreboardScene = new Scene(root);
 
         primaryStage.setTitle( "Game" );
         primaryStage.setOnShown( (evt) -> c.startAmination() );
@@ -52,8 +59,6 @@ public class Main extends Application {
 
         // player movement
         playerImageView.add(addPlayerImageView());
-        playerImageView.add(addPlayerImageView());
-        playerImageView.get(1).setImage(playerImage2);
         obstacleImageView.add(addObstacleImageView());
         obstacleImageView.add(addObstacleImageView());
         obstacleImageView.add(addObstacleImageView());
@@ -73,6 +78,14 @@ public class Main extends Application {
             gamePane.getChildren().add(obstacle);
         }
 
+        for(GameObject GO : game.getGameObjects())
+        {
+            if(GO.getClass() == PlayerObject.class)
+            {
+                players++;
+            }
+        }
+
         scene.setOnKeyReleased(event -> {
             switch (event.getCode()) {
                 case LEFT:
@@ -80,12 +93,6 @@ public class Main extends Application {
                     break;
                 case RIGHT:
                     rightPressed = false;
-                    break;
-                case A:
-                    aPressed = false;
-                    break;
-                case D:
-                    dPressed = false;
                     break;
             }
         });
@@ -111,24 +118,6 @@ public class Main extends Application {
                         rightPressed = true;
                     }
                     break;
-                case A:
-                    if (!aPressed) {
-                        PO2 = game.moveCharacter("Player2", Direction.A);
-                        playerImageView.get(1).setRotate(PO2.getCurrentRotation());
-                        playerImageView.get(1).setX(PO2.getAnchor().getX());
-                        playerImageView.get(1).setY(PO2.getAnchor().getY());
-                        aPressed = true;
-                    }
-                    break;
-                case D:
-                    if (!dPressed) {
-                        PO2 = game.moveCharacter("Player2", Direction.D);
-                        playerImageView.get(1).setRotate(PO2.getCurrentRotation());
-                        playerImageView.get(1).setX(PO2.getAnchor().getX());
-                        playerImageView.get(1).setY(PO2.getAnchor().getY());
-                        dPressed = true;
-                    }
-                    break;
             }
         });
         primaryStage.setWidth(1200);
@@ -137,7 +126,6 @@ public class Main extends Application {
 
         //Initialize first frame
         PO1 = game.moveCharacter("Player1", Direction.RIGHT);
-        PO2 = game.moveCharacter("Player2", Direction.D);
         obstacleObjects.add(new ObstacleObject(70, 48));
         obstacleObjects.add(new ObstacleObject(70, 48));
         obstacleObjects.add(new ObstacleObject(70, 48));
@@ -152,12 +140,26 @@ public class Main extends Application {
             @Override
             public void handle(long now) {
                 game.update();
-                playerImageView.get(1).setX(PO2.getAnchor().getX());
-                playerImageView.get(1).setY(PO2.getAnchor().getY());
-                playerImageView.get(0).setX(PO1.getAnchor().getX());
-                playerImageView.get(0).setY(PO1.getAnchor().getY());
+                for(ImageView PI : playerImageView)
+                {
+                    PI.setX(PO1.getAnchor().getX());
+                    PI.setY(PO1.getAnchor().getY());
+                }
 
                 for (GameObject GO : game.getGameObjects()) {
+                    //Check if the game is allowed to end.
+                    if(GO.getClass() == PlayerObject.class)
+                    {
+                        if(((PlayerObject) GO).getisDead())
+                        {
+                            playersDead++;
+                            if(playersDead == players)
+                            {
+                                //TODO: Finish creating a scene for the scorebord using a new controller class.
+                                game.endGame(scoreboardScene, primaryStage);
+                            }
+                        }
+                    }
                 }
 
                 obstacleObjects = game.returnObstacleObjects();

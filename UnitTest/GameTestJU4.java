@@ -54,7 +54,7 @@ public class GameTestJU4 {
         game.update();
 
         //Re-Assert
-        assertEquals(901d, game.getGameObjects().get(0).getAnchor().getY(), 0.0001);
+        assertEquals(901.5d, game.getGameObjects().get(0).getAnchor().getY(), 0.0001);
 
         //Assert isDead is false
         PlayerObject isNotDead = (PlayerObject)game.getGameObjects().get(0);
@@ -95,24 +95,12 @@ public class GameTestJU4 {
 
     @Test
     public void endGame() throws Exception {
-        //Method not implemented
-        try {
-            game.endGame();
-            Assert.fail();
-        }
-        catch(UnsupportedOperationException e){
-        }
+
     }
 
     @Test
     public void run() throws Exception {
-        //Method not implemented
-        try {
-            game.endGame();
-            Assert.fail();
-        }
-        catch(UnsupportedOperationException e){
-        }
+
     }
 
     @Test
@@ -122,12 +110,6 @@ public class GameTestJU4 {
 
         PO = game.moveCharacter("Player1", Direction.RIGHT);
         assertEquals(190d, PO.getCurrentRotation(), 0.0001);
-
-        PO = game.moveCharacter("Player2", Direction.D);
-        assertEquals(190d, PO.getCurrentRotation(), 0.0001);
-
-        PO = game.moveCharacter("Player2", Direction.A);
-        assertEquals(170d, PO.getCurrentRotation(), 0.0001);
     }
 
     @Test
