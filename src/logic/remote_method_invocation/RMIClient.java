@@ -124,15 +124,21 @@ public class RMIClient {
         // Test RMI connection
         if (lobbyAdmin != null) {
             testConnection();
-            try
-            {
-                user = lobbyAdmin.addUser("David");
-            }
-            catch(RemoteException ex)
-            {
-                System.out.println("Client: can't bind user to client");
-            }
-            //testlobbyAdministration();
+            user = null;
+        }
+    }
+
+    public User setUsername(String username)
+    {
+        try
+        {
+            user = lobbyAdmin.addUser(username);
+            return user;
+        }
+        catch(RemoteException ex)
+        {
+            System.out.println("Client: User not set");
+            return null;
         }
     }
 

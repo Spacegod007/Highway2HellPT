@@ -45,6 +45,7 @@ public class Main extends Application{
     private Scene titleScene;
     private Scene lobbyScene;
     private Stage stage;
+    private int minCharsName = 4;
 
 
     public static void launchView(String[] args, Administration admin)
@@ -77,7 +78,7 @@ public class Main extends Application{
             titleScene = new Scene(titleScreen, 600, 600);
             lobbyScene = new Scene(lobbyScreen, 600, 600);
 
-            primaryStage.setTitle("Hello World");
+            primaryStage.setTitle("Highway to Hell");
             primaryStage.setScene(titleScene);
             primaryStage.show();
 
@@ -142,7 +143,27 @@ public class Main extends Application{
 
     private void launchLobbyScreen()
     {
-        stage.setScene(lobbyScene);
+        String username = txtEnterName.getText();
+        if(validUsername(username))
+        {
+            administration.setUsername(username);
+            stage.setTitle("Highway to Hell: " + username );
+            stage.setScene(lobbyScene);
+        }
+    }
+
+    private boolean validUsername(String username)
+    {
+        System.out.println(username);
+        if((username).trim().length()>=minCharsName)
+        {
+            return true;
+        }
+        else
+        {
+            System.out.println("Enter a name of at least " +  minCharsName + " characters");
+            return false;
+        }
     }
 
     private void viewLobby(User player){

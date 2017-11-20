@@ -32,6 +32,10 @@ public class Administration extends UnicastRemoteObject implements IRemoteProper
         }
     }
 
+    public void setUsername(String username)
+    {
+        this.setUser(rmiClient.setUsername(username));
+    }
 
     public boolean inLobby()
     {
