@@ -15,7 +15,7 @@ public class Lobby implements Runnable, Serializable{
     private String name;
     private List<User> players;
     private List<Gamerule> gamerules;
-    private String ipAdress;
+    private String ipAddress;
     private final int port = 1111;
     private static int maxSize = 64; // static?
     public User getHost() {
@@ -39,11 +39,12 @@ public class Lobby implements Runnable, Serializable{
         return name;
     }
     
-    public Lobby(String name, int id){
+    public Lobby(String name, int id, String ipAddress){
         players = new ArrayList<>();
         gamerules = new ArrayList<>();
         this.name = name;
         this.id = id;
+        this.ipAddress = ipAddress;
     }
 
     public boolean leave(int user){

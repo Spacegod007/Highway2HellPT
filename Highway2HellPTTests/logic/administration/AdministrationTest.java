@@ -70,7 +70,7 @@ public class AdministrationTest{
     public void joinLobbyTest(){
         administration.hostLobby("lobby");
         administration.hostLobby("lobby1");
-        Lobby lobby = new Lobby("lobby",1);
+        Lobby lobby = new Lobby("lobby",1, "127.0.0.1");
         assertEquals(true,administration.joinLobby(lobby));
     }
 }

@@ -12,10 +12,13 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.Inet4Address;
+import java.net.UnknownHostException;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 import java.util.Scanner;
@@ -162,11 +165,15 @@ public class RMIClient {
 
     public Lobby addLobby(String name){
         try{
-            Lobby l = lobbyAdmin.addLobby(name, user);
+            Lobby l = lobbyAdmin.addLobby(name, user, Inet4Address.getLocalHost().getHostAddress());
             return l;
         }
         catch(RemoteException ex){
             System.out.println("Client: RemoteException: " + ex.getMessage());
+            return null;
+        }
+        catch(UnknownHostException ex){
+            System.out.println("Client: Unknown host");
             return null;
         }
     }
@@ -177,7 +184,7 @@ public class RMIClient {
         }
         catch (RemoteException ex){
             System.out.println("Client: RemoteException: " + ex.getMessage());
-            return null;
+            return new ArrayList<>();
         }
     }
 

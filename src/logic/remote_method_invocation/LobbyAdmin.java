@@ -53,8 +53,8 @@ public class LobbyAdmin extends UnicastRemoteObject implements ILobbyAdmin{
         }
     }
 
-    public Lobby addLobby(String name, User user) throws RemoteException {
-        Lobby lobby = new Lobby(name, getNextID());
+    public Lobby addLobby(String name, User user, String ipAddress) throws RemoteException {
+        Lobby lobby = new Lobby(name, getNextID(), ipAddress);
         synchronized (lobbySynchronizer)
         {
             lobbys.add(lobby);

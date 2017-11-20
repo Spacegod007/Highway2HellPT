@@ -21,6 +21,7 @@ import logic.administration.Lobby;
 import logic.administration.User;
 
 import java.io.IOException;
+import java.rmi.RemoteException;
 import java.util.Scanner;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -75,8 +76,8 @@ public class Main extends Application{
             lobbyScreen.getChildren().addAll(btnHostLobby, btnJoinLobby, btnKickPlayer, btnStartGame, btnLeaveLobby, text, listvwLobby, listvwPlayers, btnRefresh);
 
 
-            titleScene = new Scene(titleScreen, 600, 600);
-            lobbyScene = new Scene(lobbyScreen, 600, 600);
+            titleScene = new Scene(titleScreen, 700, 600);
+            lobbyScene = new Scene(lobbyScreen, 700, 600);
 
             primaryStage.setTitle("Highway to Hell");
             primaryStage.setScene(titleScene);
@@ -187,13 +188,9 @@ public class Main extends Application{
         {
             if((text.getText()).trim().length()>=4)
             {
-                try
-                {
-                    administration.hostLobby(text.getText());
-                } catch (Exception e)
-                {
-                    e.printStackTrace();
-                }
+                listvwLobby.getSelectionModel().select(administration.hostLobby(text.getText()));
+                text.clear();
+
             }
             else
             {
@@ -201,9 +198,9 @@ public class Main extends Application{
             }
         }
         else
-            {
-                System.out.println("Please leave your current lobby before hosting a new one");
-            }
+        {
+            System.out.println("Please leave your current lobby before hosting a new one");
+        }
     }
 
     private void joinLobby()

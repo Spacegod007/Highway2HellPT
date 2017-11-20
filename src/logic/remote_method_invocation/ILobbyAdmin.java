@@ -10,7 +10,7 @@ import java.util.List;
 public interface ILobbyAdmin extends Remote {
     int getNumberOfLobbies() throws RemoteException;
     Lobby getActiveLobby(int userId) throws RemoteException;
-    Lobby addLobby(String lobby, User user) throws RemoteException;
+    Lobby addLobby(String lobby, User user, String ipAddress) throws RemoteException;
     List<Lobby> getLobbies() throws RemoteException;
     boolean joinLobby(Lobby lobby, User user) throws RemoteException;
     boolean leaveLobby(int lobby, int userId, int issuerId) throws RemoteException;

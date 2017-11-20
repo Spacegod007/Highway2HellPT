@@ -35,6 +35,7 @@ public class Administration extends UnicastRemoteObject implements IRemoteProper
     public void setUsername(String username)
     {
         this.setUser(rmiClient.setUsername(username));
+        main.setListvwLobby(FXCollections.observableList(rmiClient.getLobbies()));
     }
 
     public boolean inLobby()
@@ -98,20 +99,20 @@ public class Administration extends UnicastRemoteObject implements IRemoteProper
         return false;
     }
 
-    public boolean hostLobby(String name)
+    public Lobby hostLobby(String name)
     {
+        Lobby lobby = null;
         try{
-            Lobby lobby = rmiClient.addLobby(name);
+            lobby = rmiClient.addLobby(name);
             if(lobby != null)
             {
                 rmiClient.setActiveLobby(lobby, rmiClient.getUser().getID());
-                return true;
             }
-            return false;
+            return lobby;
 
         }
         catch(Exception e){
-            return false;
+            return lobby;
         }
     }
 
