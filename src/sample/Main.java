@@ -30,11 +30,11 @@ public class Main extends Application{
         private Button btnKickPlayer = new Button();
         private Button btnStartGame = new Button();
         private Button btnLeaveLobby = new Button();
-    private FlowPane lobbiescreen;
-    private Scene lobbiescene;
+    private FlowPane lobbyScreen;
+    private Scene lobbyScene;
         private TextField txtEnterName = new TextField();
-        private Button btnLaunchlobbiescreen = new Button();
-    private FlowPane inlobbiescene;
+        private Button btnLaunchlobbyScreen = new Button();
+    private FlowPane inlobbyScene;
         private ListView<User> getListvwPlayersInLobby = new ListView<>();
     //endregion
     private static Administration administration;
@@ -57,15 +57,15 @@ public class Main extends Application{
             stage = primaryStage;
             setUpControls();
             titleScreen = new FlowPane();
-            lobbiescreen = new FlowPane();
+            lobbyScreen = new FlowPane();
             //root = FXMLLoader.load(getClass().getResource("main.fxml"));
             //deze dingen moeten zoals 'root' allebei uit een fxml komen
 
-            titleScreen.getChildren().addAll(txtEnterName, btnLaunchlobbiescreen);
-            lobbiescreen.getChildren().addAll(btnHostLobby, btnJoinLobby, btnKickPlayer, btnStartGame, btnLeaveLobby, text, listvwLobby, listvwPlayers, btnRefresh);
+            titleScreen.getChildren().addAll(txtEnterName, btnLaunchlobbyScreen);
+            lobbyScreen.getChildren().addAll(btnHostLobby, btnJoinLobby, btnKickPlayer, btnStartGame, btnLeaveLobby, text, listvwLobby, listvwPlayers, btnRefresh);
             
             titleScene = new Scene(titleScreen, 700, 600);
-            lobbiescene = new Scene(lobbiescreen, 700, 600);
+            lobbyScene = new Scene(lobbyScreen, 700, 600);
 
             primaryStage.setTitle("Highway to Hell");
             primaryStage.setScene(titleScene);
@@ -81,7 +81,7 @@ public class Main extends Application{
 
     private void setUpControls()
     {
-        //region lobbiescreen
+        //region lobbyScreen
         btnHostLobby.setLayoutX(150);
         btnHostLobby.setLayoutY(0);
         btnHostLobby.setPrefWidth(150);
@@ -128,18 +128,18 @@ public class Main extends Application{
         text.setLayoutY(0);
         //endregion
         //region TitleScreen
-        btnLaunchlobbiescreen.setOnAction(event -> launchlobbiescreen());
+        btnLaunchlobbyScreen.setOnAction(event -> launchlobbyScreen());
         //endregion
     }
 
-    private void launchlobbiescreen()
+    private void launchlobbyScreen()
     {
         String username = txtEnterName.getText();
         if(validUsername(username))
         {
             administration.setUsername(username);
             stage.setTitle("Highway to Hell: " + username );
-            stage.setScene(lobbiescene);
+            stage.setScene(lobbyScene);
         }
     }
 
