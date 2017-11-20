@@ -2,6 +2,8 @@ package bootstrapper;
 
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Group;
 import javafx.scene.Parent;
@@ -27,15 +29,16 @@ public class Main extends Application {
 
     //Playerimages for creating characters for later versions that use sockets.
     private Image playerImage = new Image("characters/character_black_blue.png");
-    private Image playerImage2 = new Image("characters/character_blonde_red.png");
+    //private Image playerImage2 = new Image("characters/character_blonde_red.png");
 
     private Image obstacleImage = new Image("objects/barrel_red_down.png");
-    private ArrayList<ImageView> playerImageView = new ArrayList<>();
-    private ArrayList<ImageView> obstacleImageView = new ArrayList<>();
+    private ArrayList<ImageView> playerImageViews = new ArrayList<>();
+    private ArrayList<ImageView> obstacleImageViews = new ArrayList<>();
     private Game game = new Game(new ArrayList<>());
     private Scene scoreboardScene;
     private Label distanceLabel = new Label("0");
     private ArrayList<Label> playerLabels = new ArrayList<>();
+    private ObservableList<Label> observablePlayerLabels;
 
     //Failsafe for if someone decides to hold in one of the buttons.
     private boolean leftPressed = false;
@@ -48,8 +51,7 @@ public class Main extends Application {
     public void start(Stage primaryStage) throws Exception{
 
         // background scroller
-        FXMLLoader fxmlLoader =
-                new FXMLLoader(getClass().getResource("/Background.fxml") );
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/Background.fxml") );
         Parent p = fxmlLoader.load();
         BackgroundController c = fxmlLoader.getController();
         Scene scene = new Scene(p);
@@ -62,30 +64,23 @@ public class Main extends Application {
         Pane gamePane = (Pane) p.lookup("#gamePane");
 
         // player movement
-        playerImageView.add(addPlayerImageView());
-        playerImageView.add(addPlayerImageView());
-        playerImageView.get(1).setImage(playerImage2);
+        playerImageViews.add(addPlayerImageView());
 
-        for (Label playerlabel : getPlayerLabels()) {
-            gamePane.getChildren().add(playerlabel);
-        }
+        obstacleImageViews.add(addObstacleImageView());
+        obstacleImageViews.add(addObstacleImageView());
+        obstacleImageViews.add(addObstacleImageView());
+        obstacleImageViews.add(addObstacleImageView());
+        obstacleImageViews.add(addObstacleImageView());
+        obstacleImageViews.add(addObstacleImageView());
+        obstacleImageViews.add(addObstacleImageView());
+        obstacleImageViews.add(addObstacleImageView());
 
-        obstacleImageView.add(addObstacleImageView());
-        obstacleImageView.add(addObstacleImageView());
-        obstacleImageView.add(addObstacleImageView());
-        obstacleImageView.add(addObstacleImageView());
-        obstacleImageView.add(addObstacleImageView());
-        obstacleImageView.add(addObstacleImageView());
-        obstacleImageView.add(addObstacleImageView());
-        obstacleImageView.add(addObstacleImageView());
-
-        for(ImageView player : playerImageView)
+        for(ImageView player : playerImageViews)
         {
             gamePane.getChildren().add(player);
-            //gamePane.getChildren().add(new Label(PO1.getName()));
         }
 
-        for(ImageView obstacle : obstacleImageView)
+        for(ImageView obstacle : obstacleImageViews)
         {
             gamePane.getChildren().add(obstacle);
         }
@@ -115,18 +110,18 @@ public class Main extends Application {
                     if(!leftPressed)
                     {
                         PO1 = game.moveCharacter("Player1", Direction.LEFT);
-                        playerImageView.get(0).setRotate(PO1.getCurrentRotation());
-                        playerImageView.get(0).setX(PO1.getAnchor().getX());
-                        playerImageView.get(0).setY(PO1.getAnchor().getY());
+                        playerImageViews.get(0).setRotate(PO1.getCurrentRotation());
+                        playerImageViews.get(0).setX(PO1.getAnchor().getX());
+                        playerImageViews.get(0).setY(PO1.getAnchor().getY());
                         leftPressed = true;
                     }
                     break;
                 case RIGHT:
                     if (!rightPressed) {
                         PO1 = game.moveCharacter("Player1", Direction.RIGHT);
-                        playerImageView.get(0).setRotate(PO1.getCurrentRotation());
-                        playerImageView.get(0).setX(PO1.getAnchor().getX());
-                        playerImageView.get(0).setY(PO1.getAnchor().getY());
+                        playerImageViews.get(0).setRotate(PO1.getCurrentRotation());
+                        playerImageViews.get(0).setX(PO1.getAnchor().getX());
+                        playerImageViews.get(0).setY(PO1.getAnchor().getY());
                         rightPressed = true;
                     }
                     break;
@@ -151,13 +146,23 @@ public class Main extends Application {
         distanceLabel.setTranslateX(6);
         distanceLabel.setTranslateY(3);
         gamePane.getChildren().add(distanceLabel);
+        getPlayerLabels();
+        observablePlayerLabels = FXCollections.observableArrayList(playerLabels);
+        gamePane.getChildren().addAll(observablePlayerLabels);
 
         //Initiate timer for map scroll.
         AnimationTimer aTimer = new AnimationTimer() {
             @Override
             public void handle(long now) {
+                for (int i = 0; i < playerLabels.size(); i++) {
+                    playerLabels.get(i).setTranslateX(PO1.getAnchor().getX());
+                    playerLabels.get(i).setTranslateY(PO1.getAnchor().getY() - 23);
+                }
+
+                //System.out.println(playerLabels.get(0).getTranslateX() + " " + playerLabels.get(0).getTranslateY());
+
                 game.update();
-                for(ImageView PI : playerImageView)
+                for(ImageView PI : playerImageViews)
                 {
                     PI.setX(PO1.getAnchor().getX());
                     PI.setY(PO1.getAnchor().getY());
@@ -182,28 +187,21 @@ public class Main extends Application {
                 obstacleObjects = game.returnObstacleObjects();
 
                 for (int i = 0; i < obstacleObjects.size(); i++) {
-                    obstacleImageView.get(i).setX(obstacleObjects.get(i).getAnchor().getX());
-                    obstacleImageView.get(i).setY(obstacleObjects.get(i).getAnchor().getY());
+                    obstacleImageViews.get(i).setX(obstacleObjects.get(i).getAnchor().getX());
+                    obstacleImageViews.get(i).setY(obstacleObjects.get(i).getAnchor().getY());
                 }
                 distanceLabel.setText("Distance: " + Long.toString(PO1.getDistance()));
 
+                ArrayList<Label> tempPlayerLabels = new ArrayList<>();
                 int index = 0;
                 for (PlayerObject player : game.returnPlayerObjects()) {
                     Label tempPlayerLabel = new Label(player.getName());
                     tempPlayerLabel.setTranslateX(player.getAnchor().getX());
                     tempPlayerLabel.setTranslateY(player.getAnchor().getY());
-                    playerLabels.set(index, tempPlayerLabel);
+                    tempPlayerLabels.add(index, tempPlayerLabel);
                     index++;
                 }
-                /*for (PlayerObject player : game.returnPlayerObjects()) {
-                    Label tempPlayerLabel = new Label(player.getName());
-                    tempPlayerLabel.setFont(new Font("Calibri", 22));
-                    tempPlayerLabel.setTranslateX(player.getAnchor().getX());
-                    tempPlayerLabel.setTranslateY(player.getAnchor().getY());
-                    playerLabels.add(index, tempPlayerLabel);
-                    index++;
-                }
-                return playerLabels;*/
+                observablePlayerLabels = FXCollections.observableArrayList(tempPlayerLabels);
             }
         };
         aTimer.start();
@@ -240,16 +238,16 @@ public class Main extends Application {
         //repo.closeConnection();
     }
 
-    private ArrayList<Label> getPlayerLabels() {
+    private void getPlayerLabels() {
         int index = 0;
         for (PlayerObject player : game.returnPlayerObjects()) {
             Label tempPlayerLabel = new Label(player.getName());
             tempPlayerLabel.setFont(new Font("Calibri", 22));
+            tempPlayerLabel.setTextFill(Color.WHITE);
             tempPlayerLabel.setTranslateX(player.getAnchor().getX());
             tempPlayerLabel.setTranslateY(player.getAnchor().getY());
             playerLabels.add(index, tempPlayerLabel);
             index++;
         }
-        return playerLabels;
     }
 }
