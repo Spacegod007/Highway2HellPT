@@ -44,6 +44,12 @@ public class Main extends Application {
     private int playersDead = 0;
     private int players = 0;
 
+    Scene scene;
+    Pane gamePane;
+    static Thread thread = new Thread();
+    Label label = new Label();
+    scoreboardController sbc;
+
     @Override
     public void start(Stage primaryStage) throws Exception{
 
@@ -51,17 +57,32 @@ public class Main extends Application {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/Background.fxml") );
         Parent p = fxmlLoader.load();
         BackgroundController c = fxmlLoader.getController();
-        Scene scene = new Scene(p);
+        scene = new Scene(p);
 
         fxmlLoader = new FXMLLoader(getClass().getResource("/views/Scoreboard.fxml"));
         Parent root = fxmlLoader.load();
-        scoreboardController sbc = fxmlLoader.getController();
+        sbc = fxmlLoader.getController();
         scoreboardScene = new Scene(root);
 
         primaryStage.setTitle( "Game" );
         primaryStage.setOnShown( (evt) -> c.startAmination() );
-        Pane gamePane = (Pane) p.lookup("#gamePane");
+        gamePane = (Pane) p.lookup("#gamePane");
 
+        primaryStage.setWidth(1200);
+        primaryStage.setHeight(1000);
+        primaryStage.setScene(scene);
+        primaryStage.show();
+
+        for(int count = 3; count >= 0; count --) {
+            thread.sleep(1000);
+            System.out.println(count);
+            if (count == 0) {
+                InitializeGame(primaryStage);
+            }
+        }
+    }
+
+    private void InitializeGame(Stage primaryStage){
         // player movement
         playerImageViews.add(addPlayerImageView());
 
@@ -126,9 +147,6 @@ public class Main extends Application {
                     break;
             }
         });
-        primaryStage.setWidth(1200);
-        primaryStage.setHeight(1000);
-        primaryStage.setScene(scene);
 
         //Initialize first frame
         PO1 = game.moveCharacter("Player1", Direction.RIGHT);
@@ -214,7 +232,7 @@ public class Main extends Application {
             }
         };
         aTimer.start();
-        primaryStage.show();
+
     }
 
     private ImageView addPlayerImageView() {
