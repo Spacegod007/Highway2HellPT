@@ -1,5 +1,5 @@
 package logic.game;
 
 public enum Direction {
-    LEFT, RIGHT
+    LEFT, RIGHT, A, D
 }
