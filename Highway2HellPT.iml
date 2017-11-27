@@ -8,9 +8,10 @@
       <sourceFolder url="file://$MODULE_DIR$/UnitTest" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/asset" type="java-resource" />
       <sourceFolder url="file://$MODULE_DIR$/resources" type="java-resource" />
-      <excludeFolder url="file://$MODULE_DIR$/.idea" />
       <sourceFolder url="file://$MODULE_DIR$/Highway2HellPTTests" isTestSource="true" />
+      <excludeFolder url="file://$MODULE_DIR$/.idea" />
       <excludeFolder url="file://$MODULE_DIR$/.idea/sonarlint" />
+      <excludeFolder url="file://$MODULE_DIR$/.scannerwork" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
