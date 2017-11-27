@@ -171,13 +171,6 @@ public class Main extends Application {
                                     }
                                 }
                                 sbc.setScore(scores);
-
-                                //Slight delay to allow the players to see how they died.
-                                try {
-                                    Thread.sleep(300);
-                                } catch (InterruptedException e) {
-                                    e.printStackTrace();
-                                }
                                 game.endGame(scoreboardScene, primaryStage);
                                 scores.clear();
                             }
