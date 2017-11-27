@@ -4,12 +4,12 @@
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="bootstrapper.BackgroundController">
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="bootstrapper.scoreboardController">
    <children>
-      <TableView layoutX="8.0" layoutY="6.0" prefHeight="385.0" prefWidth="583.0">
+      <TableView fx:id="TableView" layoutX="34.0" layoutY="33.0" prefHeight="367.0" prefWidth="566.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <columns>
-          <TableColumn prefWidth="291.0" text="Player" />
-          <TableColumn minWidth="0.0" prefWidth="291.0" text="Score" />
+          <TableColumn fx:id="Player" maxWidth="600.0" minWidth="600.0" prefWidth="600.0" resizable="false" text="Player" />
+          <TableColumn fx:id="Score" maxWidth="600.0" minWidth="600.0" prefWidth="600.0" resizable="false" text="Score" />
         </columns>
       </TableView>
    </children>

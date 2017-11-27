@@ -2,16 +2,20 @@ package bootstrapper;
 
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Group;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.TableView;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import logic.Score;
 import logic.game.*;
 
 import java.util.ArrayList;
@@ -50,7 +54,9 @@ public class Main extends Application {
         BackgroundController c = fxmlLoader.getController();
         Scene scene = new Scene(p);
 
-        Parent root = FXMLLoader.load(getClass().getResource("/views/Scoreboard.fxml"));
+        fxmlLoader = new FXMLLoader(getClass().getResource("/views/Scoreboard.fxml"));
+        Parent root = fxmlLoader.load();
+        scoreboardController sbc = fxmlLoader.getController();
         scoreboardScene = new Scene(root);
 
         primaryStage.setTitle( "Game" );
@@ -155,8 +161,25 @@ public class Main extends Application {
                             playersDead++;
                             if(playersDead == players)
                             {
-                                //TODO: Finish creating a scene for the scorebord using a new controller class.
+                                ArrayList<Score> scores = new ArrayList<>();
+                                for(GameObject tempGO : game.getGameObjects())
+                                {
+                                    if(tempGO.getClass() == PlayerObject.class)
+                                    {
+                                        PlayerObject PO = (PlayerObject)GO;
+                                        scores.add(new Score(PO.getName(), (double)PO.getDistance()));
+                                    }
+                                }
+                                sbc.setScore(scores);
+
+                                //Slight delay to allow the players to see how they died.
+                                try {
+                                    Thread.sleep(300);
+                                } catch (InterruptedException e) {
+                                    e.printStackTrace();
+                                }
                                 game.endGame(scoreboardScene, primaryStage);
+                                scores.clear();
                             }
                         }
                     }
