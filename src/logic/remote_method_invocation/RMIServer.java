@@ -1,7 +1,7 @@
 
 package logic.remote_method_invocation;
 
-import fontyspublisher.RemotePublisher;
+import logic.fontyspublisher.RemotePublisher;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;

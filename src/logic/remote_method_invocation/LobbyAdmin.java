@@ -1,7 +1,6 @@
 package logic.remote_method_invocation;
 
-import fontyspublisher.IRemotePublisherForDomain;
-import fontyspublisher.RemotePublisher;
+import logic.fontyspublisher.IRemotePublisherForDomain;
 import logic.administration.Lobby;
 import logic.administration.User;
 

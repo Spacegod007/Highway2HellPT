@@ -1,4 +1,4 @@
-package fontyspublisher;
+package logic.fontyspublisher;
 
 import java.util.*;
 

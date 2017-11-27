@@ -1,13 +1,11 @@
 package logic.administration;
 
-import fontyspublisher.IRemotePropertyListener;
+import logic.fontyspublisher.IRemotePropertyListener;
 import logic.remote_method_invocation.RMIClient;
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import sample.Main;
 
 import java.beans.PropertyChangeEvent;
-import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.List;
