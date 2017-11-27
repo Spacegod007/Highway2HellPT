@@ -144,6 +144,19 @@ public class Game implements Runnable, Observer {
         return null;
     }
 
+    public ArrayList<PlayerObject> returnPlayerObjects()
+    {
+        ArrayList<PlayerObject> listToReturn = new ArrayList<>();
+        for (GameObject GO : GameObjects)
+        {
+            if (GO.getClass() == PlayerObject.class)
+            {
+                listToReturn.add((PlayerObject)GO);
+            }
+        }
+        return listToReturn;
+    }
+
     public ArrayList<ObstacleObject> returnObstacleObjects()
     {
         ArrayList<ObstacleObject> listToReturn = new ArrayList<>();

@@ -75,7 +75,7 @@ public class PlayerObject extends GameObject {
                 case LEFT:
                     double[] leftPoint = {this.getAnchor().getX()-16d, this.getAnchor().getY()-10d};
                     //Adds distance in pixels to score.
-                    setDistance(getDistance() + (long)10d);
+                    setDistance(getDistance() + (long)1d);
 
                     //Sets the current rotation
                     setCurrentRotation(170d);
@@ -85,7 +85,7 @@ public class PlayerObject extends GameObject {
                 case RIGHT:
                     double[] rightPoint = {getAnchor().getX()+16d, getAnchor().getY()-10d};
                     //Adds distance in pixels to score.
-                    setDistance(getDistance() + (long)10d);
+                    setDistance(getDistance() + (long)1d);
 
                     //Sets the current rotation
                     setCurrentRotation(190d);
