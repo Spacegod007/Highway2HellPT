@@ -7,7 +7,7 @@ import java.util.Properties;
 public class LocalContext implements IContext {
     @Override
     public boolean testConnection(Properties props) {
-        return false;
+        return true;
     }
 
     @Override

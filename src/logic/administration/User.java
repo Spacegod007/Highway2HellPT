@@ -1,10 +1,27 @@
 package logic.administration;
 
-import javafx.beans.InvalidationListener;
-import javafx.beans.Observable;
 
-public class User implements Observable {
+import java.io.Serializable;
+
+public class User implements Serializable
+{
     private String username;
+    private int ID;
+    private Lobby activeLobby;
+
+    public int getID()
+    {
+        return ID;
+    }
+    public Lobby getActiveLobby()
+    {
+        return activeLobby;
+    }
+
+    public void setActiveLobby(Lobby activeLobby)
+    {
+        this.activeLobby = activeLobby;
+    }
 
     public String getUsername() {
         return username;
@@ -14,17 +31,13 @@ public class User implements Observable {
         this.username = username;
     }
 
-    public User(String username) {
+    public User(String username, int ID) {
         this.username = username;
+        this.ID = ID;
     }
 
     @Override
-    public void addListener(InvalidationListener listener) {
-
-    }
-
-    @Override
-    public void removeListener(InvalidationListener listener) {
-
+    public String toString() {
+        return username;
     }
 }
