@@ -5,7 +5,6 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import logic.Gamerule;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Observable;

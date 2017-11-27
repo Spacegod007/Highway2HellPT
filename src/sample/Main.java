@@ -4,8 +4,6 @@ import database.Contexts.LocalContext;
 import database.Repositories.Repository;
 import javafx.application.Application;
 import javafx.application.Platform;
-import javafx.beans.InvalidationListener;
-import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -18,7 +16,7 @@ import logic.administration.Lobby;
 import logic.administration.User;
 
 public class Main extends Application{
-    
+
     //region Form controls
     private Stage stage;
     private FlowPane titleScreen;
@@ -43,14 +41,14 @@ public class Main extends Application{
     private static Administration administration;
     private final int minCharsName = 4;
     private final int minCharsLobbyName = 4;
-    
+
     public static void launchView(String[] args, Administration admin)
     {
         administration = admin;
         System.out.println("launching");
         launch(args);
     }
-    
+
     @Override
     public void start(Stage primaryStage) throws Exception{
         try
@@ -257,7 +255,7 @@ public class Main extends Application{
         {
             administration.leaveLobby();
         }
-        catch(Exception e)
+        catch(Exception ignored)
         {
 
         }

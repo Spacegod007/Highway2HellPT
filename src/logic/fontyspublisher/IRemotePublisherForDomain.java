@@ -29,7 +29,7 @@ public interface IRemotePublisherForDomain extends Remote {
      * @param property empty string not allowed
      * @throws java.rmi.RemoteException
      */
-    public void registerProperty(String property) throws RemoteException;
+    void registerProperty(String property) throws RemoteException;
     
     /**
      * Unregister property. Unregister property at this publisher. From now on
@@ -40,7 +40,7 @@ public interface IRemotePublisherForDomain extends Remote {
      * @param property registered property at this publisher
      * @throws java.rmi.RemoteException
      */
-    public void unregisterProperty(String property) throws RemoteException;
+    void unregisterProperty(String property) throws RemoteException;
     
     /**
      * Inform all listeners subscribed to property. All listeners subscribed
@@ -54,7 +54,7 @@ public interface IRemotePublisherForDomain extends Remote {
      * @param newValue new value of property at domain
      * @throws java.rmi.RemoteException
      */
-    public void inform(String property, Object oldValue, Object newValue)
+    void inform(String property, Object oldValue, Object newValue)
             throws RemoteException;
     
     /**
@@ -64,5 +64,5 @@ public interface IRemotePublisherForDomain extends Remote {
      * @return list of registered properties including null
      * @throws java.rmi.RemoteException
      */
-    public List<String> getProperties() throws RemoteException;
+    List<String> getProperties() throws RemoteException;
 }

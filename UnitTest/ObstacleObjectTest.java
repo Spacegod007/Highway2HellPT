@@ -1,5 +1,4 @@
 import logic.game.ObstacleObject;
-import logic.game.Point;
 import org.junit.Before;
 import org.junit.Test;
 

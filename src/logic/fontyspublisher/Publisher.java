@@ -162,12 +162,12 @@ public class Publisher {
             }
         } else {
             // Unsubscribe property listener from all propertys
-            /**
-             * REMARK BY NICO KUIJPERS.
-             * Set<String> keyset = propertyListeners.keySet();
-             * may cause a java.util.ConcurrentModificationException
-             * when the key set changes. Therefore, the key set is copied
-             * to an ArrayList.
+            /*
+              REMARK BY NICO KUIJPERS.
+              Set<String> keyset = propertyListeners.keySet();
+              may cause a java.util.ConcurrentModificationException
+              when the key set changes. Therefore, the key set is copied
+              to an ArrayList.
              */
             List<String> keyset = new ArrayList<>(propertyListeners.keySet());
             for (String key : keyset) {
@@ -203,12 +203,12 @@ public class Publisher {
         } else {
             // Inform all listeners, including listeners that are subscribed
             // to null-String
-            /**
-             * REMARK BY NICO KUIJPERS.
-             * Set<String> keyset = propertyListeners.keySet();
-             * may cause a java.util.ConcurrentModificationException
-             * when the key set changes. Therefore, the key set is copied
-             * to an ArrayList.
+            /*
+              REMARK BY NICO KUIJPERS.
+              Set<String> keyset = propertyListeners.keySet();
+              may cause a java.util.ConcurrentModificationException
+              when the key set changes. Therefore, the key set is copied
+              to an ArrayList.
              */
             List<String> keyset = new ArrayList<>(propertyListeners.keySet());
             for (String key : keyset) {
@@ -269,13 +269,13 @@ public class Publisher {
             // Unsubscribe listeners from this property
             propertyListeners.remove(property);
         } else {
-            /**
-             * REMARK BY NICO KUIJPERS.
-             * Set<String> keyset = propertyListeners.keySet();
-             * causes java.util.ConcurrentModificationException
-             * as the key set changes while keys are being removed.
-             * Therefore, the key set is copied to an ArrayList.
-             * Corresponding test method: testUnregisterPropertyAllProperties().
+            /*
+              REMARK BY NICO KUIJPERS.
+              Set<String> keyset = propertyListeners.keySet();
+              causes java.util.ConcurrentModificationException
+              as the key set changes while keys are being removed.
+              Therefore, the key set is copied to an ArrayList.
+              Corresponding test method: testUnregisterPropertyAllProperties().
              */
             List<String> keyset = new ArrayList<>(propertyListeners.keySet());
             for (String key : keyset) {

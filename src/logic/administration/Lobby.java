@@ -106,7 +106,7 @@ public class Lobby implements Runnable, Serializable{
                break;
            }
         }}
-        catch(Exception e){}
+        catch(Exception ignored){}
     }
 
 }

@@ -1,5 +1,3 @@
-package logic.game;
-
 import javafx.scene.paint.Color;
 import org.junit.Assert;
 import org.junit.Before;
