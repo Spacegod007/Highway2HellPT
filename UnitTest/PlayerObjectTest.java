@@ -1,12 +1,15 @@
 import javafx.scene.paint.Color;
+import logic.game.Direction;
+import logic.game.PlayerObject;
+import logic.game.Point;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.junit.Assert.*;
+import static junit.framework.TestCase.assertEquals;
 
 public class PlayerObjectTest {
 
-    PlayerObject PO = new PlayerObject(new Point(0,0), "Player1", Color.BLACK);
+    private final PlayerObject PO = new PlayerObject(new Point(0,0), "Player1", Color.BLACK);
 
     @Before
     public void setUp() throws Exception {

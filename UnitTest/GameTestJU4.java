@@ -1,4 +1,5 @@
 import javafx.scene.paint.Color;
+import logic.game.*;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -6,12 +7,12 @@ import org.junit.Test;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.Assert.*;
+import static junit.framework.TestCase.assertEquals;
 
 public class GameTestJU4 {
 
-    List<GameObject> gameObject = new ArrayList<>();
-    Game game = new Game(new ArrayList<>());
+    private final List<GameObject> gameObject = new ArrayList<>();
+    private final Game game = new Game(new ArrayList<>());
 
     @Before
     public void setUp() throws Exception {
