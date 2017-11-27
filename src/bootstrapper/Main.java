@@ -5,15 +5,12 @@ import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Group;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.TableView;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
-import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
@@ -26,12 +23,10 @@ import java.util.ArrayList;
 public class Main extends Application {
 
     private PlayerObject PO1 = new PlayerObject(new Point(960, 900),"Player1", Color.BLACK);
-    //private PlayerObject PO2 = new PlayerObject(new Point(860, 900),"Player2", Color.BLACK);
     private ArrayList<ObstacleObject> obstacleObjects = new ArrayList<>();
 
     //Playerimages for creating characters for later versions that use sockets.
     private Image playerImage = new Image("characters/character_black_blue.png");
-    //private Image playerImage2 = new Image("characters/character_blonde_red.png");
 
     private Image obstacleImage = new Image("objects/barrel_red_down.png");
     private ArrayList<ImageView> playerImageViews = new ArrayList<>();
